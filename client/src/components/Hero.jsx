@@ -16,11 +16,11 @@ const Hero = () => {
             {/* Avatars + Stars */}
             <div className="flex items-center mt-24 md:mt-36">
                 <div className="flex -space-x-3 pr-3">
-                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200" alt="user3" className="size-8 object-cover rounded-full border-2 border-white hover:-translate-y-0.5 transition z-[1]" />
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200" alt="user3" className="size-8 object-cover rounded-full border-2 border-white hover:-translate-y-0.5 transition z-1" />
                     <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200" alt="user1" className="size-8 object-cover rounded-full border-2 border-white hover:-translate-y-0.5 transition z-2" />
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200" alt="user2" className="size-8 object-cover rounded-full border-2 border-white hover:-translate-y-0.5 transition z-[3]" />
-                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200" alt="user3" className="size-8 object-cover rounded-full border-2 border-white hover:-translate-y-0.5 transition z-[4]" />
-                    <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="user5" className="size-8 rounded-full border-2 border-white hover:-translate-y-0.5 transition z-[5]" />
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200" alt="user2" className="size-8 object-cover rounded-full border-2 border-white hover:-translate-y-0.5 transition z-3" />
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200" alt="user3" className="size-8 object-cover rounded-full border-2 border-white hover:-translate-y-0.5 transition z-4" />
+                    <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="user5" className="size-8 rounded-full border-2 border-white hover:-translate-y-0.5 transition z-5" />
                 </div>
 
                 <div>
@@ -35,12 +35,12 @@ const Hero = () => {
 
             {/* Headline */}
             <h1 className="text-4xl md:text-6xl font-semibold max-w-lg md:max-w-2xl text-center mt-4 leading-tight md:leading-tight">
-                Buy & Sell your <span className="relative bg-gradient-to-r from-purple-700 to-[#764de1] bg-clip-text text-transparent capitalize">
+                Buy & Sell your <span className="relative bg-gray-to-r from-purple-700 to-[#764de1] bg-clip-text text-transparent capitalize">
                     social
                     <div className="z-10 absolute bottom-0 left-0 w-full scale-120" >
                         <img src='https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/gradient_arc.svg' alt="gradient" />
                     </div>
-                </span> <span className='relative bg-gradient-to-r from-[#764de1] to-indigo-600 bg-clip-text text-transparent capitalize'>profils</span> oneline.
+                </span> <span className='relative  bg-gray-to-r from-[#764de1] to-indigo-600 bg-clip-text text-transparent capitalize'>profils</span> oneline.
             </h1>
 
             <p className="max-w-xl text-center text-base my-7">A secure maketplace to buy and sell Instagram, Youtobe , Twitter, Telegram and more - fast safe and hassle-free.</p>
