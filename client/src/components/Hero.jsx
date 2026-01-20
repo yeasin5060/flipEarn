@@ -35,12 +35,12 @@ const Hero = () => {
 
             {/* Headline */}
             <h1 className="text-4xl md:text-6xl font-semibold max-w-lg md:max-w-2xl text-center mt-4 leading-tight md:leading-tight">
-                Buy & Sell your <span className="relative bg-gray-to-r from-purple-700 to-[#764de1] bg-clip-text text-transparent capitalize">
+                Buy & Sell your <span className="relative bg-gradient-to-r from-purple-700 to-[#764de1] bg-clip-text text-transparent capitalize">
                     social
                     <div className="z-10 absolute bottom-0 left-0 w-full scale-120" >
                         <img src='https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/gradient_arc.svg' alt="gradient" />
                     </div>
-                </span> <span className='relative  bg-gray-to-r from-[#764de1] to-indigo-600 bg-clip-text text-transparent capitalize'>profils</span> oneline.
+                </span> <span className='relative  bg-gradient-to-r from-[#764de1] to-indigo-600 bg-clip-text text-transparent capitalize'>profils</span> oneline.
             </h1>
 
             <p className="max-w-xl text-center text-base my-7">A secure maketplace to buy and sell Instagram, Youtobe , Twitter, Telegram and more - fast safe and hassle-free.</p>
