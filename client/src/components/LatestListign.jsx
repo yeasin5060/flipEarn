@@ -1,6 +1,7 @@
 import React from 'react'
 import Title from './Title'
 import {useSelector} from 'react-redux'
+import ListingCard from './ListingCard'
 
 const LatestListign = () => {
 
@@ -11,8 +12,7 @@ const LatestListign = () => {
         <div className='flex flex-col gap-6 px-6'>
             {listings.slice(0,4).map((listing , index)=>(
                 <div className='mx-auto w-full max-w-3xl rounded-xl' key={index}>
-                    <h1>{listing.title}</h1>
-                    <h1>{listing.username}</h1>
+                    <ListingCard listing={listing}/>
                 </div>
             ))}
         </div>
