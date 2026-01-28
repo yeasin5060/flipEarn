@@ -106,6 +106,27 @@ const FilterSidebar = ({showFilterphone,setShowFilterPhone,filters , setFilters}
             </div>
           )}
         </div>
+         {/*Followers Range */}
+        <div>
+          <button onClick={()=> toggleSection('followers')} className='flex items-center justify-between w-full mb-3'>
+            <label className='text-sm font-medium text-gray-800'>Minimum Followers</label>
+            <ChevronDown className={`size-4 transition-transform ${expandedSection.followers ? 'rotate-180':''}`}/>
+          </button>
+          {expandedSection.followers && (
+            <select 
+            value={filters.minFolowers?.toString() || '0'} 
+            onChange={(e)=> onFiltersChenge({...filters , minFolowers : parseInt(e.target.value) || 0 })}
+            className='w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-700 outline-indigo-500'>
+              <option value='0'>Any Amount</option>
+              <option value='1000'>1K+</option>
+              <option value='10000'>10K+</option>
+              <option value='50000'>50K+</option>
+              <option value='100000'>100K+</option>
+              <option value='500000'>500K+</option>
+              <option value='1000000'>1M+</option>
+            </select>
+          )}
+        </div>
       </div>
     </div>
   )
