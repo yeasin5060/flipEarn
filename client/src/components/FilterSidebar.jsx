@@ -164,6 +164,25 @@ const FilterSidebar = ({showFilterphone,setShowFilterPhone,filters , setFilters}
             </select>
           )}
         </div>
+          {/*Verification status */}
+        <div>
+          <button onClick={()=> toggleSection('status')} className='flex items-center justify-between w-full mb-3'>
+            <label className='text-sm font-medium text-gray-800 capitalize'>Verification status</label>
+            <ChevronDown className={`size-4 transition-transform ${expandedSection.status ? 'rotate-180':''}`}/>
+          </button>
+          {expandedSection.status && (
+            <div className='space-y-3'>
+              <label className='flex items-center space-x-2 cursor-pointer'>
+                <input type="checkbox" checked = {filters.verified || false} onChange={(e)=> onFiltersChenge({...filters , verified  : e.target.checked || null })}/>
+                <span className='text-sm text-gray-700'>Verified account only</span>
+              </label>
+              <label className='flex items-center space-x-2 cursor-pointer'>
+                <input type="checkbox" checked = {filters.monetized || false} onChange={(e)=> onFiltersChenge({...filters , monetized  : e.target.checked || null })}/>
+                <span className='text-sm text-gray-700'>Monetized account only</span>
+              </label>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
