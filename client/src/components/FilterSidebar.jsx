@@ -44,6 +44,25 @@ const FilterSidebar = ({showFilterphone,setShowFilterPhone,filters , setFilters}
     {value : 'twitch' , label : 'Twitch'},
     {value : 'descord' , label : 'Descord'},
   ];
+
+  const niches = [
+    {value : 'lifestyle' , label : 'Lifestyle'},
+    {value : 'fitness' , label : 'Fitness'},
+    {value : 'food' , label : 'Food'},
+    {value : 'travel' , label : 'Travel'},
+    {value : 'tech' , label : 'Technology'},
+    {value : 'gaming' , label : 'Gaming'},
+    {value : 'instagram' , label : 'Instagram'},
+    {value : 'fashion' , label : 'Fashion'},
+    {value : 'beauty' , label : 'Beauty'},
+    {value : 'business' , label : 'Business'},
+    {value : 'education' , label : 'Education'},
+    {value : 'music' , label : 'Music'},
+    {value : 'art' , label : 'Art'},
+    {value : 'sports' , label : 'Sports'},
+    {value : 'health' , label : 'Health'},
+    {value : 'finance' , label : 'Finance'},
+  ]
   return (
     <div className={`${showFilterphone ? 'max-sm:fixed ': 'max-sm:hidden'}max-sm:inset-0 z-100 max-sm:h-screen max-sm:overflow-scroll bg-white rounded-lg shadow-sm border border-gray-200 h-fit sticky top-24 md:min-w-[300px]`}>
       <div className='p-4 border-b border-gray-200'>
@@ -124,6 +143,24 @@ const FilterSidebar = ({showFilterphone,setShowFilterPhone,filters , setFilters}
               <option value='100000'>100K+</option>
               <option value='500000'>500K+</option>
               <option value='1000000'>1M+</option>
+            </select>
+          )}
+        </div>
+          {/*Niche Filter */}
+        <div>
+          <button onClick={()=> toggleSection('niche')} className='flex items-center justify-between w-full mb-3'>
+            <label className='text-sm font-medium text-gray-800 capitalize'>niche</label>
+            <ChevronDown className={`size-4 transition-transform ${expandedSection.niche ? 'rotate-180':''}`}/>
+          </button>
+          {expandedSection.niche && (
+            <select 
+              value={filters.niche || ''} 
+              onChange={(e)=> onFiltersChenge({...filters , niche  : e.target.value || null })}
+              className='w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-700 outline-indigo-500'>
+              <option value=''>All Niche</option>
+              {niches.map((niche)=>(
+                <option key={niche.value} value={niche.value}>{niche.label}</option>
+              ))}
             </select>
           )}
         </div>
