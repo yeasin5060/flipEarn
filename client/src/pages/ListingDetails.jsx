@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { getProfileLink } from '../assets/assets';
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { getProfileLink, platformIcons } from '../assets/assets';
 import { useSelector } from 'react-redux';
-import { ArrowLeftIcon, Loader2Icon } from 'lucide-react';
+import { ArrowLeftIcon, ArrowUpRightFromSquareIcon, CheckCircle2, DollarSign, Loader2Icon } from 'lucide-react';
 
 const ListingDetails = () => {
   const navigate = useNavigate();
@@ -27,7 +27,47 @@ const ListingDetails = () => {
 
       <div className='flex items-start max-md:flex-col gap-10'>
         <div className='flex-1 max-md:w-full'>
-
+            {/* top section */}
+          <div className='bg-white rounded-xl border border-gray-200 p-6 mb-5'>
+            <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-4'>
+              <div className='flex items-start gap-3'>
+                <div className='p-2 rounded-xl'>
+                  {platformIcons[listing.platform]}
+                </div>
+                <div>
+                  <h2 className='flex items-center gap-2 text-xl font-semibold text-gray-800'>{listing.title}
+                    <Link target='_blank' to={profileLink}>
+                      <ArrowUpRightFromSquareIcon className='size-4 text-indigo-500'/>
+                    </Link>
+                  </h2>
+                  <p className='text-gray-500 text-sm'>
+                    @{listing.username} . {listing.platform?.charAt().toUpperCase() + listing.platform.slice(1)}
+                  </p>
+                  <div className='flex gap-2 mt-2'>
+                    {listing.verified &&(
+                      <span className='flex items-center text-xs bg-indigo-50 text-indigo-600 px-2 py-1 rounded-md capitalize'>
+                        <CheckCircle2 className='w-3 h-3 mr-1'/>
+                        verified
+                      </span>
+                    )}
+                    {listing.monetized &&(
+                      <span className='flex items-center text-xs bg-green-50 text-green-600 px-2 py-1 rounded-md capitalize'>
+                        <DollarSign className='w-3 h-3 mr-1'/>
+                        minetized
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className='text-right'>
+                <h3 className='text-2xl font-bold text-gray-800'>
+                  {currency}
+                  {listing.price?.toLocaleString()}
+                </h3>
+                <p className='text-sm text-gray-500'>USD</p>
+              </div>
+            </div>
+          </div>
         </div>
         {/* Seller Info $ Purchase Option  */}
         <div></div>
