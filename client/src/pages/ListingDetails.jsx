@@ -74,7 +74,7 @@ const ListingDetails = () => {
               </div>
             </div>
           </div>
-           {/* Screenshort section */}
+          {/* Screenshort section */}
            {images?.length > 0 && (
             <div className='bg-white rounded-xl border border-gray-200 mb-5 overflow-hidden '>
               <div className='p-4'>
@@ -103,8 +103,8 @@ const ListingDetails = () => {
               </div>
             </div>
            )}
-           {/* Account Metrics */}
-           <div className='text-white rounded-xl border border-gray-200 mb-5'>
+          {/* Account Metrics */}
+          <div className='text-white rounded-xl border border-gray-200 mb-5'>
               <div className='p-4 border-b border-gray-100'>
                 <h4 className='font-semibold text-gray-800 capitalize'>Account Metrics</h4>
               </div>
@@ -138,6 +138,13 @@ const ListingDetails = () => {
                 <p className='text-gray-500 text-xs capitalize'>Listed</p>
               </div>
             </div>
+          </div>
+          {/* Description */}
+          <div className='bg-white rounded-xl border border-gray-200 p-6 mb-5'>
+            <div className='p-4 border-b border-gray-100'>
+              <h4 className='font-semibold text-gray-800 capitalize'>Description</h4>
+            </div>
+            <div className='p-4 text-sm text-gray-600'>{listing.description}</div>
           </div>
         </div>
         {/* Seller Info $ Purchase Option  */}
