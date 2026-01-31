@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getProfileLink, platformIcons } from '../assets/assets';
 import { useSelector } from 'react-redux';
-import { ArrowLeftIcon, ArrowUpRightFromSquareIcon, Calendar, CheckCircle2, ChevronLeftIcon, ChevronRightIcon, DollarSign, Eye, LineChart, Loader2Icon, Users } from 'lucide-react';
+import { ArrowLeftIcon, ArrowUpRightFromSquareIcon, Calendar, CheckCircle2, ChevronLeftIcon, ChevronRightIcon, DollarSign, Eye, LineChart, Loader2Icon, MapPin, Users } from 'lucide-react';
 
 const ListingDetails = () => {
   const navigate = useNavigate();
@@ -145,6 +145,38 @@ const ListingDetails = () => {
               <h4 className='font-semibold text-gray-800 capitalize'>Description</h4>
             </div>
             <div className='p-4 text-sm text-gray-600'>{listing.description}</div>
+          </div>
+          {/* Additional Details */}
+          <div className='bg-white rounded-xl border border-gray-200 p-6 mb-5'>
+            <div className='p-4 border-b border-gray-100'>
+              <h4 className='font-semibold text-gray-800 capitalize'>Additional Details</h4>
+            </div>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 p-4 text-sm'>
+              <div>
+                <p className='text-gray-500 capitalize'>niche</p>
+                <p className='font-medium capitalize'>{listing.niche}</p>
+              </div>
+              <div>
+                <p className='text-gray-500 capitalize'>primary country</p>
+                <p className='font-medium flex items-center'><MapPin className='size-4 text-gray-400 mr-1'/>{listing.country}</p>
+              </div>
+              <div>
+                <p className='text-gray-500 capitalize'>audience age</p>
+                <p className='font-medium capitalize'>{listing.age_range}</p>
+              </div>
+              <div>
+                <p className='text-gray-500 capitalize'>platform verified</p>
+                <p className='font-medium capitalize'>{listing.platformAssured ? 'Yes':'No'}</p>
+              </div>
+              <div>
+                <p className='text-gray-500 capitalize'>monetization</p>
+                <p className='font-medium capitalize'>{listing.monetized ? 'Enabled' : 'Desabled'}</p>
+              </div>
+              <div>
+                <p className='text-gray-500 capitalize'>status</p>
+                <p className='font-medium capitalize'>{listing.status}</p>
+              </div>
+            </div>
           </div>
         </div>
         {/* Seller Info $ Purchase Option  */}
