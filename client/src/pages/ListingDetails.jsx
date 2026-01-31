@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getProfileLink, platformIcons } from '../assets/assets';
 import { useSelector } from 'react-redux';
-import { ArrowLeftIcon, ArrowUpRightFromSquareIcon, CheckCircle2, ChevronLeftIcon, ChevronRightIcon, DollarSign, Loader2Icon } from 'lucide-react';
+import { ArrowLeftIcon, ArrowUpRightFromSquareIcon, Calendar, CheckCircle2, ChevronLeftIcon, ChevronRightIcon, DollarSign, Eye, LineChart, Loader2Icon, Users } from 'lucide-react';
 
 const ListingDetails = () => {
   const navigate = useNavigate();
@@ -103,9 +103,47 @@ const ListingDetails = () => {
               </div>
             </div>
            )}
+           {/* Account Metrics */}
+           <div className='text-white rounded-xl border border-gray-200 mb-5'>
+              <div className='p-4 border-b border-gray-100'>
+                <h4 className='font-semibold text-gray-800 capitalize'>Account Metrics</h4>
+              </div>
+            <div className='grid grid-cols-2 md:grid-cols-4 gap-4 p-4 text-center'>
+              <div>
+                <Users className='mx-auto w-5 h- mb-1 text-gray-400' />
+                <p className='font-semibold text-gray-800'>
+                  {listing.followers_count?.toLocaleString()}
+                </p>
+                <p className='text-gray-500 text-xs capitalize'>followers</p>
+              </div>
+              <div>
+                <LineChart className='mx-auto w-5 h- mb-1 text-gray-400' />
+                <p className='font-semibold text-gray-800'>
+                  {listing.engagement_rate}%
+                </p>
+                <p className='text-gray-500 text-xs capitalize'>engagement</p>
+              </div>
+              <div>
+                <Eye className='mx-auto w-5 h- mb-1 text-gray-400' />
+                <p className='font-semibold text-gray-800'>
+                  {listing.monthly_views?.toLocaleString()}
+                </p>
+                <p className='text-gray-500 text-xs capitalize'>monthly views</p>
+              </div>
+              <div>
+                <Calendar className='mx-auto w-5 h- mb-1 text-gray-400' />
+                <p className='font-semibold text-gray-800'>
+                  {new Date(listing.createAt).toLocaleDateString()}
+                </p>
+                <p className='text-gray-500 text-xs capitalize'>Listed</p>
+              </div>
+            </div>
+          </div>
         </div>
         {/* Seller Info $ Purchase Option  */}
-        <div></div>
+        <div>
+
+        </div>
       </div>
     </div>
   ): (
