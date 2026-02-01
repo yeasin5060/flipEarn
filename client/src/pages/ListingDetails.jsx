@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getProfileLink, platformIcons } from '../assets/assets';
 import { useSelector } from 'react-redux';
-import { ArrowLeftIcon, ArrowUpRightFromSquareIcon, Calendar, CheckCircle2, ChevronLeftIcon, ChevronRightIcon, DollarSign, Eye, LineChart, Loader2Icon, MapPin, Users } from 'lucide-react';
+import { ArrowLeftIcon, ArrowUpRightFromSquareIcon, Calendar, CheckCircle2, ChevronLeftIcon, ChevronRightIcon, DollarSign, Eye, LineChart, Loader2Icon, MapPin, MessageSquareMoreIcon, ShoppingBagIcon, Users } from 'lucide-react';
 
 const ListingDetails = () => {
   const navigate = useNavigate();
@@ -180,8 +180,28 @@ const ListingDetails = () => {
           </div>
         </div>
         {/* Seller Info $ Purchase Option  */}
-        <div>
-
+        <div className='bg-white min-w-full md:min-w-[370px] rounded-xl border border-gray-200 p-5 max-md:mb-10'>
+          <h4 className='font-semibold text-gray-800 mb-4'>Seller Information</h4>
+          <div className='flex items-center gap-3 mb-2'>
+            <img className='size-10 rounded-full' src={listing.owner?.image} alt="seller image" />
+            <div>
+              <p className='font-medium text-gray-800'>{listing.owner?.name}</p>
+              <p className='text-sm text-gray-500'>{listing.owner?.email}</p>
+            </div>
+          </div>
+          <div className='flex items-center justify-between text-gray-600 mb-4 text-sm'>
+            <p>Member Since<span className='font-medium'>{new Date(listing.owner?.createdAt).toLocaleDateString()} </span></p>
+          </div>
+          <button className='w-full bg-indigo-600 py-2 text-white rounded-lg capitalize hover:bg-indigo-700 transition tex-sm font-medium flex items-center justify-center gap-2'>
+            <MessageSquareMoreIcon className='size-4'/>chat
+          </button>
+          {
+            listing.isCredentialChanged && (
+              <button className='w-full mt-2 bg-purple-600 py-2 text-white rounded-lg capitalize hover:bg-purple-700 transition tex-sm font-medium flex items-center justify-center gap-2'>
+                <ShoppingBagIcon className='size-4'/>chat
+              </button>
+            )
+          }
         </div>
       </div>
     </div>
