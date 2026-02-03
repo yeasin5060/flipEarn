@@ -7,7 +7,7 @@ import { setChat } from '../app/features/chatSlice.js';
 
 const ListingDetails = () => {
 
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
   const navigate = useNavigate();
   const currency = import.meta.env.VITE_CURRENCY || '$';

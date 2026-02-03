@@ -11,14 +11,14 @@ const chatSlice = createSlice({
         setChat : (state , action)=> {
             state.listing = action.payload.listing
             state.isOpen = true
-            if(state.payload.chatId){
+            if(action.payload.chatId){
                 state.chatId = action.payload.chatId
             }
         },
         clearChat : (state)=> {
-            state.listing = null
-            state.isOpen = false
-            state.chatId = null
+            state.listing = null;
+            state.isOpen = false;
+            state.chatId = null;
         }
     }
 });
