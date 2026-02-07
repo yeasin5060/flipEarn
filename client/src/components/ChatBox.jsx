@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { dummyChats } from '../assets/assets';
 import { Loader2Icon, X } from 'lucide-react';
@@ -6,7 +6,7 @@ import { clearChat } from '../app/features/chatSlice.js';
 import {format} from 'date-fns'
 
 const ChatBox = () => {
-     const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const {listing ,isOpen , chatId} = useSelector((state)=> state.chat);
     const user = {id : 'user_2'} ;
     const [chat , setchat] = useState(null);
@@ -18,12 +18,12 @@ const ChatBox = () => {
     const fetchChat = ()=> {
         setchat(dummyChats[0]);
         setMessages(dummyChats[0].messages);
-        setIsLoding(false)
+        setIsLoding(false);
     };
 
     useEffect(()=> {
         if (listing) {
-            fetchChat()
+            fetchChat();
         }
     },[listing]);
 
@@ -37,7 +37,13 @@ const ChatBox = () => {
         }
     },[isOpen]);
 
-    if(!isOpen || !listing) return null
+     const messagesEndRef = useRef(null);
+     //----For Auto Scroll----
+     useEffect(()=> {
+        messagesEndRef.current?.scrollIntoView({behavior : 'smooth'})
+     },[messages.length]);
+
+    if(!isOpen || !listing) return null;
   return (
     <div className='fixed inset-0 bg-black/70 backdrop-blur bg-opacity-50 z-100 flex items-center justify-center sm:p-4'>
         <div className='bg-white sm:rounded-lg shadow-2xl w-full max-w-2xl h-screen sm:h-[600px] flex flex-col'>
@@ -77,7 +83,24 @@ const ChatBox = () => {
                         ))
                     )
                 }
+                <div ref = {messagesEndRef}/>
             </div>
+             {/*input Area */}
+            {chat?.listing?.status = 'active' ?
+                (
+                    <form className='p-4 bg-white border-t border-gray-200 rounded-b-lg'>
+                        <div className='flex items-end space-x-2'>
+                            <textarea className='flex-1 resize-none border border-gray-300 rounded-lg px-4 py-2 focus:outline-indigo-500 max-h-32' placeholder='Type your message...' rows={1}/>
+                        </div>
+                    </form>
+                )
+                :
+                (
+                    <div className='p-4 bg-white border border-gray-200 rounded-b-lg'>
+                        <p>{chat? `Listing is ${chat?.listing?.status}` : 'Loading Chat....'}</p>
+                    </div>
+                )
+            }
         </div>
     </div>
   )
