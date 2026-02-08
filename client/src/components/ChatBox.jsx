@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { dummyChats } from '../assets/assets';
-import { Loader2Icon, X } from 'lucide-react';
+import { Loader2Icon, Send, X } from 'lucide-react';
 import { clearChat } from '../app/features/chatSlice.js';
 import {format} from 'date-fns'
 
@@ -40,8 +40,15 @@ const ChatBox = () => {
      const messagesEndRef = useRef(null);
      //----For Auto Scroll----
      useEffect(()=> {
-        messagesEndRef.current?.scrollIntoView({behavior : 'smooth'})
+        messagesEndRef.current?.scrollIntoView({behavior : 'smooth'});
      },[messages.length]);
+
+     const handleSendMessage = async (e)=> {
+        e.preventDefault();
+        if(!newMessage.trim()|| isSending) return;
+        setMessages([...messages,{id : Date.now(), chatId : chat.id, sender_id : user.id, messages : newMessage , createdAt : new Date()}]);
+        setNewMessage('');
+     }
 
     if(!isOpen || !listing) return null;
   return (
@@ -77,7 +84,7 @@ const ChatBox = () => {
                             <div key={message.id} className={`flex ${message.sender_id === user.id ? 'justify-end' : 'justify-start'}`}>
                                 <div className={`max-w-[70%] rounded-lg p-3 pb-1 ${message.sender_id === user.id ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-200 text-gray-800'}`}>
                                     <p className='text-sm whitespace-pre-wrap break-words '>{message.message}</p>
-                                    <p className={`text-[10px] mt-1 ${message.sender_id === user.id ? 'text-indigo-200': 'text-gray-400'}`}>{format(new Date(message.createdAt), 'MMM dd "at" h:mm a')}</p>
+                                    <p className={`text-[10px] mt-1 ${message.sender_id === user.id ? 'text-indigo-200': 'text-gray-400'}`}>{format(new Date(message.createdAt), "MMM dd 'at' h:mm a")}</p>
                                 </div>
                             </div>
                         ))
@@ -86,18 +93,30 @@ const ChatBox = () => {
                 <div ref = {messagesEndRef}/>
             </div>
              {/*input Area */}
-            {chat?.listing?.status = 'active' ?
+            {chat?.listing?.status === 'active' ?
                 (
-                    <form className='p-4 bg-white border-t border-gray-200 rounded-b-lg'>
+                    <form onSubmit={handleSendMessage} className='p-4 bg-white border-t border-gray-200 rounded-b-lg'>
                         <div className='flex items-end space-x-2'>
-                            <textarea className='flex-1 resize-none border border-gray-300 rounded-lg px-4 py-2 focus:outline-indigo-500 max-h-32' placeholder='Type your message...' rows={1}/>
+                            <textarea 
+                            value={newMessage}
+                            onChange={(e)=> setNewMessage(e.target.value)}
+                            onKeyDown={(e)=>{
+                                if(e.key === 'Enter' && !e.shiftKey){
+                                    e.preventDefault();
+                                    handleSendMessage(e);
+                                }
+                            }}
+                            className='flex-1 resize-none border border-gray-300 rounded-lg px-4 py-2 focus:outline-indigo-500 max-h-32' placeholder='Type your message...' rows={1}/>
+                            <button disabled={!newMessage.trim()|| isSending} type='submit' className='bg-indigo-600 hover:bg-indigo-700 text-white p-2.5 rounded-lg disabled:opacity-50 transition-colors'>
+                                {isSending ? <Loader2Icon className='w-5 h-5 animate-spin'/> : <Send className='w-5 h-5'/>}
+                            </button>
                         </div>
                     </form>
                 )
                 :
                 (
                     <div className='p-4 bg-white border border-gray-200 rounded-b-lg'>
-                        <p>{chat? `Listing is ${chat?.listing?.status}` : 'Loading Chat....'}</p>
+                        <p className='text-sm text-gray-600 text-center'>{chat? `Listing is ${chat?.listing?.status}` : 'Loading Chat....'}</p>
                     </div>
                 )
             }
