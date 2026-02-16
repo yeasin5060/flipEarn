@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { dummyChats } from '../assets/assets';
-import { Search } from 'lucide-react';
+import { MessageCircle, Search } from 'lucide-react';
 
 const Messages = () => {
   const user = {id : 'user_1'};
@@ -35,6 +35,36 @@ const Messages = () => {
           <Search className='absolute left-3 top-1/2 transform translate-y-1/2 text-gray-400 w-5 h-5'/>
           <input className='w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-indigo-500' type="text" placeholder='Search conversations...' value={searchQuery}  onChange={(e)=> setSeachQuery(e.target.value)}/>
         </div>
+         {/*Chat List */}
+        {
+          loading ? (
+            <div className='text-center text-gray-500 py-20'>
+              Loding message...
+            </div>
+          ):chats.length === 0 ? (
+            <div className='bg-white rounded-lg shadow-xs border border-gray-200 p-16 text-center'> 
+              <div className='w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4'>
+                <MessageCircle className='w-8 h-8 text-gray-400'/>
+              </div>
+              <h3 className='text-xl font-bold text-gray-800 mb-2'>{searchQuery ? 'No chats found' : 'No messages yet'}</h3>
+              <p className='text-gray-600'>{searchQuery ? 'Try a differnt search term' : 'Start a conversetion by viewing a listing and clicking "Chat with Seller"'}</p>
+            </div>
+          ):
+          (
+            <div className='bg-white rounded-lg border border-gray-200 divide-y divide-gray-200'>
+              {
+                chats.map((chat)=> {
+                  const chatUser = chat.chatUserId === user?.id ? chat.ownerUser : chat.chatUser;
+                  return (
+                    <button>
+                      
+                    </button>
+                  )
+                })
+              }
+            </div>
+          )
+        }
       </div>
     </div>
   )
