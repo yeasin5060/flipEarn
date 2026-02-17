@@ -56,8 +56,20 @@ const Messages = () => {
                 chats.map((chat)=> {
                   const chatUser = chat.chatUserId === user?.id ? chat.ownerUser : chat.chatUser;
                   return (
-                    <button>
-                      
+                    <button key={chat.id} className='w-full p-4 hover:bg-gray-50 transition-colors text-left'>
+                      <div className='flex items-start space-x-4'>
+                        <div className='flex-shrink-0'>
+                          <img className='w-12 h-12 rounded-lg object-cover' src={chatUser?.image} alt={chat?.chatUser?.name} />
+                        </div>
+                        <div className='flex-1 min-w-0'>
+                          <div className='flex items-center justify-between mb-1'>
+                            <h3 className='font-semibold text-gray-800 truncate'>{chat.listing?.title}</h3>
+                            <span className='text-xs text-gray-500 flex-shrink-0 ml-2'>{chat.updatedAt}</span>
+                          </div>
+                          <p className='text-xs text-gray-600 truncate mb-1'>{chatUser?.name}</p>
+                          <p className={`text-xs truncate ${!chat.isLastMessageRead && chat.lastMessageSenderId !== user?.id ?'text-indigo-600 font-medium' : 'text-gray-500'}`}>{chat.lastMeaage || 'No messages yet'}</p>
+                        </div>
+                      </div>
                     </button>
                   )
                 })
