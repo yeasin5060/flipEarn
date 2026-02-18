@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { dummyChats } from '../assets/assets';
 import { MessageCircle, Search } from 'lucide-react';
+import {format, isToday, isYesterday, parseISO } from 'date-fns'
 
 const Messages = () => {
   const user = {id : 'user_1'};
@@ -8,6 +9,22 @@ const Messages = () => {
   const [chats , setChats] = useState([]);
   const [searchQuery , setSeachQuery] = useState('');
   const [loading , setLoading] = useState(true);
+
+  const formatTime = (dateString)=> {
+    if(!dateString) return;
+    const date = parseISO(dateString);
+
+    if(isToday(date)){
+      return 'Today ' + format(date, 'HH:mm')
+    }
+
+    if(isYesterday(date)){
+      return 'Yesterday ' + format(date, 'HH:mm')
+    }
+
+    return format(date, 'MMM d')
+
+  }
 
   const fetchUserChats = async ()=> {
     setChats(dummyChats);
@@ -64,10 +81,10 @@ const Messages = () => {
                         <div className='flex-1 min-w-0'>
                           <div className='flex items-center justify-between mb-1'>
                             <h3 className='font-semibold text-gray-800 truncate'>{chat.listing?.title}</h3>
-                            <span className='text-xs text-gray-500 flex-shrink-0 ml-2'>{chat.updatedAt}</span>
+                            <span className='text-xs text-gray-500 flex-shrink-0 ml-2'>{formatTime(chat.updatedAt)}</span>
                           </div>
                           <p className='text-xs text-gray-600 truncate mb-1'>{chatUser?.name}</p>
-                          <p className={`text-xs truncate ${!chat.isLastMessageRead && chat.lastMessageSenderId !== user?.id ?'text-indigo-600 font-medium' : 'text-gray-500'}`}>{chat.lastMeaage || 'No messages yet'}</p>
+                          <p className={`text-xs truncate ${!chat.isLastMessageRead && chat.lastMessageSenderId !== user?.id ?'text-indigo-600 font-medium' : 'text-gray-500'}`}>{chat.lastMessage || 'No messages yet'}</p>
                         </div>
                       </div>
                     </button>
