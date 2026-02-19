@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { dummyChats } from '../assets/assets';
 import { MessageCircle, Search } from 'lucide-react';
 import {format, isToday, isYesterday, parseISO } from 'date-fns'
@@ -25,6 +25,14 @@ const Messages = () => {
     return format(date, 'MMM d')
 
   }
+
+  const filteredChets = useMemo(()=> {
+    const query = searchQuery.toLowerCase();
+    return chats.filter((chat)=>{
+      const chatuser = chat.chatuserId === user?.id ? chat?.ownerUser : chat?.chatUser ;
+      return chat.listing?.title?.toLowerCase().includes(query) || chatuser?.name?.toLowerCase().includes(query)
+    })
+  },[chats,searchQuery])
 
   const fetchUserChats = async ()=> {
     setChats(dummyChats);
@@ -58,7 +66,7 @@ const Messages = () => {
             <div className='text-center text-gray-500 py-20'>
               Loding message...
             </div>
-          ):chats.length === 0 ? (
+          ):filteredChets.length === 0 ? (
             <div className='bg-white rounded-lg shadow-xs border border-gray-200 p-16 text-center'> 
               <div className='w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4'>
                 <MessageCircle className='w-8 h-8 text-gray-400'/>
@@ -70,7 +78,7 @@ const Messages = () => {
           (
             <div className='bg-white rounded-lg border border-gray-200 divide-y divide-gray-200'>
               {
-                chats.map((chat)=> {
+                filteredChets.map((chat)=> {
                   const chatUser = chat.chatUserId === user?.id ? chat.ownerUser : chat.chatUser;
                   return (
                     <button key={chat.id} className='w-full p-4 hover:bg-gray-50 transition-colors text-left'>
