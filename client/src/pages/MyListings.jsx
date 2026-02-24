@@ -1,15 +1,16 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import {useNavigate} from 'react-router-dom'
-import { Plus } from 'lucide-react';
+import { CheckCircle, DollarSign, Eye, Plus, TrendingUp } from 'lucide-react';
+import StatCard from '../components/StatCard';
 
 const MyListings = () => {
-  const {userListing ,  balance } = useSelector((state)=> state.listing);
+  const {userListings ,  balance } = useSelector((state)=> state.listing);
   const currency = import.meta.env.VITE_CURRENCY  || '$';
   const navigate = useNavigate();
-  const totalValue = userListing.reduce((sum , listing)=> sum + (listing.price || 0), 0);
-  const activeListings = userListing.filter((listing)=> listing.status === 'active').length;
-  const soldListings = userListing.filter((listing)=> listing.status === 'sold').length;
+  const totalValue = userListings.reduce((sum , listing)=> sum + (listing.price || 0), 0);
+  const activeListings = userListings.filter((listing)=> listing.status === 'active').length;
+  const soldListings = userListings.filter((listing)=> listing.status === 'sold').length;
 
   return (
     <div className='px-6 md:px-16 lg:px-24 xl:px-32 pt-8'>
@@ -26,7 +27,13 @@ const MyListings = () => {
       </div>
       {/*stats */}
       <div className='grid grid-cols-1 md:grid-cols-4 gap-6 mb-8'>
+        <StatCard title='Total Listing' value={userListings.length} icon={<Eye className='size-6 text-indigo-600'/>} color='indigo'/>
 
+        <StatCard title='Active Listing' value={activeListings} icon={<CheckCircle className='size-6 text-green-600'/>} color='green'/>
+
+        <StatCard title='sold' value={soldListings} icon={<TrendingUp className='size-6 text-indigo-600' />} color='indigo'/>
+
+        <StatCard title='Total Value' value={`${currency} ${totalValue.toLocaleString()}`} icon={<DollarSign className='size-6 text-yellow-600'/>}  color='yellow'/>
       </div>
     </div>
   )
