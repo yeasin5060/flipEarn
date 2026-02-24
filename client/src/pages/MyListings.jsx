@@ -24,6 +24,10 @@ const MyListings = () => {
           <span>new listing</span>
         </button>
       </div>
+      {/*stats */}
+      <div className='grid grid-cols-1 md:grid-cols-4 gap-6 mb-8'>
+
+      </div>
     </div>
   )
 }
