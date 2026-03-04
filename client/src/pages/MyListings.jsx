@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import {useNavigate} from 'react-router-dom'
-import { ArrowDownCircleIcon, CheckCircle, CoinsIcon, DollarSign, Eye, LockIcon, Plus, StarIcon, TrendingUp, UserIcon, WalletIcon } from 'lucide-react';
+import { ArrowDownCircleIcon, BanIcon, CheckCircle, Clock, CoinsIcon, DollarSign, Eye, LockIcon, Plus, StarIcon, TrendingUp, UserIcon, WalletIcon, XCircle } from 'lucide-react';
 import StatCard from '../components/StatCard';
 import { platformIcons } from '../assets/assets';
 
@@ -12,7 +12,42 @@ const MyListings = () => {
   const totalValue = userListings.reduce((sum , listing)=> sum + (listing.price || 0), 0);
   const activeListings = userListings.filter((listing)=> listing.status === 'active').length;
   const soldListings = userListings.filter((listing)=> listing.status === 'sold').length;
+  
+  const formatNumber = (num) => {
+    if(num >= 1000000 ) return (num / 1000000).toFixed(1) + 'M';
+    if(num >= 1000 ) return (num / 1000).toFixed(1) + 'K';
+    return num?.toString() || '0'
+  }
 
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'active':
+        return <CheckCircle className='size-3.5'/>
+      case 'ban':
+        return <BanIcon className='size-3.5'/>  
+      case 'sold':
+        return <DollarSign className='size-3.5'/>
+      case 'inactive':
+        return <XCircle className='size-3.5'/>
+      default:
+        return <Clock className='size-3.5'/>
+    }
+  } 
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'active':
+        return 'text-green-800'
+      case 'ban':
+        return 'text-red-800'
+      case 'sold':
+        return 'text-indigo-800'
+      case 'inactive':
+        return 'text-gray-800'
+      default:
+        return 'text-gray-800'
+    }
+  } 
   return (
     <div className='px-6 md:px-16 lg:px-24 xl:px-32 pt-8'>
       {/*Header */}
@@ -116,8 +151,11 @@ const MyListings = () => {
                     <div className='grid grid-cols-2 gap-2 text-sm'>
                       <div className='flex items-center space-x-2'>
                         <UserIcon className='size-4 text-gray-400'/>
-                        <span>{listing.followers_count} followers</span>
+                        <span>{formatNumber(listing.followers_count)} followers</span>
                       </div>
+                      <span className={`flex items-center justify-end gap-1 ${getStatusColor(listing.status)}`}>
+                        {getStatusIcon(listing.status)} {''} <span>{listing.status}</span>
+                      </span>
                     </div>
                   </div>
                 </div>
