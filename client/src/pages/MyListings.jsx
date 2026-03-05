@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import {useNavigate} from 'react-router-dom'
-import { ArrowDownCircleIcon, BanIcon, CheckCircle, Clock, CoinsIcon, DollarSign, Eye, LockIcon, Plus, StarIcon, TrendingUp, UserIcon, WalletIcon, XCircle } from 'lucide-react';
+import { ArrowDownCircleIcon, BanIcon, CheckCircle, Clock, CoinsIcon, DollarSign, Edit, Eye, EyeIcon, EyeOffIcon, LockIcon, Plus, StarIcon, TrashIcon, TrendingUp, UserIcon, WalletIcon, XCircle } from 'lucide-react';
 import StatCard from '../components/StatCard';
 import { platformIcons } from '../assets/assets';
 
@@ -156,6 +156,30 @@ const MyListings = () => {
                       <span className={`flex items-center justify-end gap-1 ${getStatusColor(listing.status)}`}>
                         {getStatusIcon(listing.status)} {''} <span>{listing.status}</span>
                       </span>
+                      <div className='flex items-center space-x-2'>
+                        <TrendingUp className='size-4 text-gray-400'/>
+                        <span>{listing.engagement_rate}% engagement</span>
+                      </div>
+                    </div>
+                    <div className='flex items-center justify-between pt-3 border-t border-gray-200'>
+                      <span className='text-2xl font-bold text-gray-800'>
+                        {currency}
+                        {listing.price.toLocaleString()}
+                      </span>
+                      <div className='flex items-center space-x-2'>
+                        {listing.status !== 'sold' && (
+                          <button className='p-2 border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-red-500'>
+                            <TrashIcon className='size-4'/>
+                          </button>
+                        )}
+                        <button className='p-2 border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-indigo-600'>
+                          <Edit className='size-4'/>
+                        </button>
+                        <button className='p-2 border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-purple-600'>
+                          {listing.status === 'active' && (<EyeOffIcon className='size-4'/>)}
+                          {listing.status !== 'active' && (<EyeIcon className='size-4'/>)}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
