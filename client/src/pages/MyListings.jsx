@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 import { ArrowDownCircleIcon, BanIcon, CheckCircle, Clock, CoinsIcon, DollarSign, Edit, Eye, EyeIcon, EyeOffIcon, LockIcon, Plus, StarIcon, TrashIcon, TrendingUp, UserIcon, WalletIcon, XCircle } from 'lucide-react';
@@ -12,6 +12,9 @@ const MyListings = () => {
   const totalValue = userListings.reduce((sum , listing)=> sum + (listing.price || 0), 0);
   const activeListings = userListings.filter((listing)=> listing.status === 'active').length;
   const soldListings = userListings.filter((listing)=> listing.status === 'sold').length;
+
+  const [showCredentialSubmission , setShowCredrentialSubmission] = useState(null);
+  const [showWithdrawal , setShowWithdrawal] = useState(null);
   
   const formatNumber = (num) => {
     if(num >= 1000000 ) return (num / 1000000).toFixed(1) + 'M';
@@ -48,6 +51,18 @@ const MyListings = () => {
         return 'text-gray-800'
     }
   } 
+
+  const toggleStatus = async (listingId) => {
+
+  }
+
+  const deleteListing = async (listingId) => {
+
+  }
+
+  const markAsFeatured = async (listingId) => {
+
+  }
   return (
     <div className='px-6 md:px-16 lg:px-24 xl:px-32 pt-8'>
       {/*Header */}
@@ -140,7 +155,7 @@ const MyListings = () => {
                             </div>
                           </div>
                           {listing.status === 'active' && (
-                            <StarIcon size={18} className={`text-yellow-500 cursor-pointer ${listing.featured && 'fill-amber-500'}`} /> 
+                            <StarIcon onClick={()=> markAsFeatured(listing.id)} size={18} className={`text-yellow-500 cursor-pointer ${listing.featured && 'fill-amber-500'}`} /> 
                           )}
                         </div>
                       </div>
@@ -168,14 +183,14 @@ const MyListings = () => {
                       </span>
                       <div className='flex items-center space-x-2'>
                         {listing.status !== 'sold' && (
-                          <button className='p-2 border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-red-500'>
+                          <button onClick={()=> deleteListing(listing.id)} className='p-2 border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-red-500'>
                             <TrashIcon className='size-4'/>
                           </button>
                         )}
-                        <button className='p-2 border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-indigo-600'>
+                        <button onClick={()=> navigate(`/edit-listing/${listing.id}`)} className='p-2 border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-indigo-600'>
                           <Edit className='size-4'/>
                         </button>
-                        <button className='p-2 border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-purple-600'>
+                        <button onClick={()=> toggleStatus(listing.id)} className='p-2 border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-purple-600'>
                           {listing.status === 'active' && (<EyeOffIcon className='size-4'/>)}
                           {listing.status !== 'active' && (<EyeIcon className='size-4'/>)}
                         </button>
