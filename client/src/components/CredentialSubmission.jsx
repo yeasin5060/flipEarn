@@ -33,6 +33,16 @@ const CredentialSubmission = ({onClose , listing}) => {
             <X className='w-5 h-5'/>
           </button>
         </div>
+        {/*Form*/}
+        <form onSubmit={handleSubmission} className='flex flex-col items-start gap-4 p-4 overflow-y-scroll'>
+          {credential.map((cred , index)=> (
+            <div key={cred.type} className='grid grid-cols-[2fr_3fr_1fr] items-center gap-2'>
+              <label className='text-sm font-medium text-gray-800'>{cred.name}</label>
+              <input className='w-full px-2 py-1.5 text-sm border border-gray-300 rounded outline-indigo-300' type="text" value={cred.value} onChange={(e) =>setCredential((prev)=> prev.map((c,i)=>(i=== index ?{...c , value : e.target.value} : c))) }/>
+              <X className='w-5 h-5 text-gray-500 hover:text-gray-700 cursor-pointer' onClick={()=> setCredential((prev)=> prev.filter((_ , i)=> i !== index))}/>
+            </div>
+          ))}
+        </form>
       </div>
     </div>
   )
