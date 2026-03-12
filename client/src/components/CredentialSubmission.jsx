@@ -49,6 +49,10 @@ const CredentialSubmission = ({onClose , listing}) => {
               <CirclePlus className='w-5 h-5'/>
             </button>
           </div>
+           {/* submit bittion */}
+          <button type='submit' className='bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 mt-4 rounded-md capitalize'>
+            submit
+          </button>
         </form>
       </div>
     </div>
