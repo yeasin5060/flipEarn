@@ -1,4 +1,4 @@
-import { X } from 'lucide-react';
+import { CirclePlus, X } from 'lucide-react';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 
@@ -42,6 +42,13 @@ const CredentialSubmission = ({onClose , listing}) => {
               <X className='w-5 h-5 text-gray-500 hover:text-gray-700 cursor-pointer' onClick={()=> setCredential((prev)=> prev.filter((_ , i)=> i !== index))}/>
             </div>
           ))}
+           {/*Add more field*/}
+          <div className='flex items-center gap-2'>
+            <input className='outline-none border-b border-gray-200' type="text" value={newField} onChange={(e)=> setNewField(e.target.value)} placeholder='field name...'/>
+            <button type='button' onClick={handleAddField} className='flex items-center gap-2 text-sm text-gray-600 hover:text-gray-700 cursor-pointer'>
+              <CirclePlus className='w-5 h-5'/>
+            </button>
+          </div>
         </form>
       </div>
     </div>
