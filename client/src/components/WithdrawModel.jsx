@@ -28,6 +28,19 @@ const WithdrawModel = ({onClose}) => {
             <X className='w-5 h-5'/>
           </button>
         </div>
+         {/*Form*/}
+        <form className='flex flex-col items-center gap-4 p-4 overflow-y-scroll' onSubmit={handleSubmission}>
+          <div className='grid grid-cols-[2fr_3fr_1fr] items-center gap-2'>
+            Amount <input className='w-full px-2 py-1.5 text-sm border border-gray-300 rounded outline-indigo-400' type='number' value={amount} onChange={(e)=> setAmount(e.target.value)} required/>
+
+            {account.map((field , index)=> (
+              <div key={index} className='grid grid-cols-[2fr_3fr_1fr] items-center gap-2'>
+                <label className='text-sm font-medium text-gray-800'>{field.name}</label>
+                <input type={field.type} value={field.value} onChange={(e) => setAccount((prev)=> prev.map(( c ,i)=> ( i === index ? {...c , value : e.target.value} : c)))} />
+              </div>
+            ))}
+          </div>
+        </form>
       </div>
     </div>
   )
