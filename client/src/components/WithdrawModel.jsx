@@ -37,9 +37,13 @@ const WithdrawModel = ({onClose}) => {
           {account.map((field , index)=> (
             <div key={index} className='grid grid-cols-[2fr_3fr_1fr] items-center gap-2'>
               <label className='text-sm font-medium text-gray-800'>{field.name}</label>
-              <input type={field.type} value={field.value} onChange={(e) => setAccount((prev)=> prev.map(( c ,i)=> ( i === index ? {...c , value : e.target.value} : c)))} />
+              <input className='w-full px-2 py-1.5 text-sm border border-gray-300 rounded outline-indigo-400' type={field.type} value={field.value} onChange={(e) => setAccount((prev)=> prev.map(( c ,i)=> ( i === index ? {...c , value : e.target.value} : c)))} />
             </div>
           ))}
+            {/*Submit Button*/}
+            <button type='submit' className='bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 mt-4  rounded-md'>
+              Apply for Withdrawal
+            </button>
         </form>
       </div>
     </div>
