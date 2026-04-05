@@ -81,16 +81,42 @@ const ManageListing = () => {
   }
   return (
     <div className='min-h-screen py-8'>
-      <div className='mb-8'>
-        <h1 className='text-3xl font-bold text-gray-800 capitalize'>
-           {isEditing ? 'Edit Listing' : 'List Your Account'}
-        </h1>
-        <p className='text-gray-600 mt-2'>
-          {isEditing ? 'Update your existing account listing' : 'Create a mock listing to display your account info'}
-        </p>
+      <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='mb-8'>
+          <h1 className='text-3xl font-bold text-gray-800 capitalize'>
+            {isEditing ? 'Edit Listing' : 'List Your Account'}
+          </h1>
+          <p className='text-gray-600 mt-2'>
+            {isEditing ? 'Update your existing account listing' : 'Create a mock listing to display your account info'}
+          </p>
+        </div>
+        <form className='space-y-8' onSubmit={handleSubmit}>
+          {/*Basic Info */}
+          <Section title='Basic Information'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+              <InputField label='Listing Title *' value={formData.title} onChange={(v)=> handleInputChange('title', v)} placeholder='e.g., Premium Travel Instagram Account' required = {true} />
+            </div>
+          </Section>
+        </form>
       </div>
     </div>
   )
 }
+
+ {/*----- Common Elements----- */}
+
+const Section = ({title , children})=> ( 
+  <div className='bg-white rounded-lg border border-gray-200 p-6 space-y-6'>
+    <h1 className='text-lg font-semibold text-gray-800'>{title}</h1>
+    {children}
+  </div>
+)
+
+const InputField = ({label , value , onChange, placeholder, type = 'text', required = false , min = null , max = null})=> ( 
+  <div>
+    <label className='block text-sm font-medium text-gray-700 mt-2'>{label}</label>
+    <input className='w-full px-3 py-1.5 text-gray-600 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300' type={type} min={min} max={max} placeholder={placeholder} value={value} required ={required} onChange={(e)=> onChange(e.target.value)}/>
+  </div>
+)
 
 export default ManageListing
