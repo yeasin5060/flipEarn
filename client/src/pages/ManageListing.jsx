@@ -95,6 +95,13 @@ const ManageListing = () => {
           <Section title='Basic Information'>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
               <InputField label='Listing Title *' value={formData.title} onChange={(v)=> handleInputChange('title', v)} placeholder='e.g., Premium Travel Instagram Account' required = {true} />
+
+              <SelectField label='Platforms *' value={formData.platform}  options={platForms} onChange={(v)=> handleInputChange('platform', v)}/> 
+              
+              <InputField label='Username/Handle *' value={formData.username} onChange={(v)=> handleInputChange('username', v)} placeholder='@username' required = {true} />
+
+               <SelectField label='Niche/Category *' value={formData.niche}  options={niches} onChange={(v)=> handleInputChange('niche', v)}/> 
+              
             </div>
           </Section>
         </form>
@@ -116,6 +123,18 @@ const InputField = ({label , value , onChange, placeholder, type = 'text', requi
   <div>
     <label className='block text-sm font-medium text-gray-700 mt-2'>{label}</label>
     <input className='w-full px-3 py-1.5 text-gray-600 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300' type={type} min={min} max={max} placeholder={placeholder} value={value} required ={required} onChange={(e)=> onChange(e.target.value)}/>
+  </div>
+)
+
+const SelectField = ({label , value , onChange, options, placeholder, required = false})=> ( 
+  <div>
+    <label className='block text-sm font-medium text-gray-700 mt-2'>{label}</label>
+    <select className='w-full px-3 py-1.5 text-gray-600 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300' value={value} onChange={(e)=> onChange(e.target.value)} required = {required}>
+      <option value=''>Select...</option>
+      {options.map((opt)=> (
+        <option key={opt} value={opt}>{opt}</option>
+      ))}
+    </select>
   </div>
 )
 
