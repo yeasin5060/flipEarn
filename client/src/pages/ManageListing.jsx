@@ -17,7 +17,7 @@ const ManageListing = () => {
     platform : '',
     username : '',
     followers_count : '',
-    engament_rent : '',
+    engagement_rate : '',
     monthly_views : '',
     niche : '',
     price : '',
@@ -104,6 +104,24 @@ const ManageListing = () => {
               
             </div>
           </Section>
+          {/* METRICS */}
+          <Section title='Account Metrics'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+              <InputField label='Followers count *' min={0} type='number' value={formData.followers_count} onChange={(v)=> handleInputChange('followers_count', v)} placeholder='10000' required = {true} />
+
+              <InputField label='Engagement Rate (%)' min={0} max={100} type='number' value={formData.engagement_rate} onChange={(v)=> handleInputChange('engagement_rate', v)} placeholder='4' />
+
+              <InputField label='Monthly Views/Impressions' min={0} type='number' value={formData.monthly_views} onChange={(v)=> handleInputChange('monthly_views', v)} placeholder='100000' />
+            </div>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-6'>
+              <InputField label='Primary Audience Country' min={0} value={formData.country} onChange={(v)=> handleInputChange('country', v)} placeholder='United States' />
+
+              <SelectField label='Primary Audience Age Range ' value={formData.age_range}  options={ageRanges} onChange={(v)=> handleInputChange('age_range', v)}/> 
+            </div>
+            <div className='space-y-3'>
+
+            </div>
+          </Section>
         </form>
       </div>
     </div>
@@ -138,4 +156,17 @@ const SelectField = ({label , value , onChange, options, placeholder, required =
   </div>
 )
 
+const CheckboxField = ({label , checked , onChange, required = false})=> ( 
+  <label className='flex items-center space-x-2 cursor-pointer'>
+    <input className='size-4' type='checkbox' checked = {checked} onChange={(e)=> onChange(e.target.checked)} required = {required}/>
+    <span className='text-sm text-gray-700'>{label}</span>
+  </label>
+)
+
+const TextareaField = ({label , value , onChange, required = false})=> ( 
+  <div>
+    <label className=' block'>
+  </label>
+  </div>
+)
 export default ManageListing
