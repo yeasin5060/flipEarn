@@ -119,7 +119,8 @@ const ManageListing = () => {
               <SelectField label='Primary Audience Age Range ' value={formData.age_range}  options={ageRanges} onChange={(v)=> handleInputChange('age_range', v)}/> 
             </div>
             <div className='space-y-3'>
-
+              <CheckboxField label='Account is verified on the platform' checked={formData.verified} onChange={(v)=> handleInputChange('verified', v)} />
+              <CheckboxField label='Account is monetize' checked={formData.monetized} onChange={(v)=> handleInputChange('monetize', v)} />
             </div>
           </Section>
         </form>
@@ -165,8 +166,10 @@ const CheckboxField = ({label , checked , onChange, required = false})=> (
 
 const TextareaField = ({label , value , onChange, required = false})=> ( 
   <div>
-    <label className=' block'>
-  </label>
+    <label className='block text-sm font-medium text-gray-600 mb-2'>
+      {label}
+    </label>
+    <textarea className='w-full px-3 py-1.5 text-gray-600 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300' rows={5} value={value} onChange={(e)=> onChange(e.target.value)} required = {required}/>
   </div>
 )
 export default ManageListing
