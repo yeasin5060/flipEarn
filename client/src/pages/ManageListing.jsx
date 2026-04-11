@@ -123,6 +123,12 @@ const ManageListing = () => {
               <CheckboxField label='Account is monetize' checked={formData.monetized} onChange={(v)=> handleInputChange('monetize', v)} />
             </div>
           </Section>
+           {/* Pricing */}
+          <Section title='Pricing & Description'>
+            <InputField label='Asking Price (USD) *' min={0} type='number' value={formData.price} onChange={(v)=> handleInputChange('price', v)} placeholder='2500.00' required={true}/>
+
+            <TextareaField label='Description *' value={formData.description} onChange={(v)=> handleInputChange('description', v)} required={true}/>
+          </Section>
         </form>
       </div>
     </div>
