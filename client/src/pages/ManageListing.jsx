@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast';
-import {Loader2Icon} from 'lucide-react'
+import {Loader2Icon, Upload, X} from 'lucide-react'
 
 const ManageListing = () => {
   const {id} = useParams();
   const navigate = useNavigate();
-  const {userListing} = useSelector((state)=> state.listing);
+  const {userListings} = useSelector((state)=> state.listing);
 
   const[logingListing,setLodingLsting] = useState(false);
   const[isEditing,setIsEditing] = useState(false);
@@ -55,10 +55,11 @@ const ManageListing = () => {
     // get listing data for edit if 'id' porvided (edit mode)
   
   useEffect(()=>{
-    if(!id) return
+    if(!id) return;
+
     setIsEditing(true);
     setLodingLsting(true);
-    const listing = userListing.find((listing) => listing.id === id);
+    const listing = userListings.find((listing) => listing.id === id);
     if(listing){
       setFormData(listing);
       setLodingLsting(false);
@@ -129,6 +130,35 @@ const ManageListing = () => {
 
             <TextareaField label='Description *' value={formData.description} onChange={(v)=> handleInputChange('description', v)} required={true}/>
           </Section>
+           {/* Images */}
+           <Section title='Screenshots & Proof'>
+             <div className='border-2 border-dashed border-gray-300 rounded-lg p-6 text-center'>
+              <input className='hidden' type='file' id='images' multiple accept='image/*' onChange={handleImageUpload} />
+              <Upload className='w-12 h-12 text-gray-400 mx-auto mb-4'/>
+              <label className='px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer' htmlFor='images'>Choose Files</label>
+              <p className='text-sm text-gray-500 mt-2'>Upload screenshots or proof of account analytics</p>
+             </div>
+             {formData.images.length > 0 && (
+              <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mt-4'>
+                {formData.images.map((img , index)=> (
+                  <div key={index} className='relative'>
+                    <img className='w-full h-24 object-cover rounded-lg' src={typeof img === 'string' ? img : URL.createObjectURL(img)} alt={`image ${index + 1}`}/>
+                    <button className='absolute -top-2 -right-2 dsize-6 bg-red-600 text-white rounded-full hover:bg-red-700' type='button' onClick={()=> removeImage(index)}>
+                      <X/>
+                    </button>
+                  </div>
+                ))}
+              </div>
+             )}
+           </Section>
+           <div className='flex justify-end gap-3 text-sm'>
+            <button onClick={()=> navigate(-1)} className='px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors capitalize'>
+              Cancel
+            </button>
+            <button className='text-white px-6 py-2 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors capitalize' type='submit'>
+              {isEditing ? 'Update Listing' : 'Create Listing'}
+            </button>
+           </div>
         </form>
       </div>
     </div>

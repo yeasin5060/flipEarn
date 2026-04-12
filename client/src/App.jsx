@@ -25,7 +25,7 @@ function App() {
         <Route path="/my-listing" element ={<MyListings/>}/>
         <Route path="/listing/:listingId" element ={<ListingDetails/>}/>
         <Route path="/create-listing" element ={<ManageListing/>}/>
-        <Route path="/edit-listing/id" element ={<ManageListing/>}/>
+        <Route path="/edit-listing/:id" element ={<ManageListing/>}/>
         <Route path="/messages" element ={<Messages/>}/>
         <Route path="/my-order" element ={<MyOrders/>}/>
         <Route path="/loading" element ={<Loading/>}/>
