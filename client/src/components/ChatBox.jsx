@@ -37,6 +37,9 @@ const ChatBox = () => {
         }
     },[isOpen]);
 
+    console.log(messages);
+    
+
      const messagesEndRef = useRef(null);
      //----For Auto Scroll----
      useEffect(()=> {
@@ -83,7 +86,7 @@ const ChatBox = () => {
                         messages.map((message)=> (
                             <div key={message.id} className={`flex ${message.sender_id === user.id ? 'justify-end' : 'justify-start'}`}>
                                 <div className={`max-w-[70%] rounded-lg p-3 pb-1 ${message.sender_id === user.id ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-200 text-gray-800'}`}>
-                                    <p className='text-sm whitespace-pre-wrap break-words '>{message.message}</p>
+                                    <p className='text-sm whitespace-pre-wrap break-words'>{message.message}</p>
                                     <p className={`text-[10px] mt-1 ${message.sender_id === user.id ? 'text-indigo-200': 'text-gray-400'}`}>{format(new Date(message.createdAt), "MMM dd 'at' h:mm a")}</p>
                                 </div>
                             </div>
