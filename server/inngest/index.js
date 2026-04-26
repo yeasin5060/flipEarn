@@ -48,14 +48,29 @@ export const syncUserDeletion = inngest.createFunction(
         const listings = await prisma.listing.findMany({
             where : {ownerId : data.id}
         });
+
         const chats = await prisma.chat.findMany({
-            where : {ownerId : data.id}
+            where : {OR : [{ownerUserId : data.id },{chatUserid : data.id}]}
         });
+
+         const transactions = await prisma.transaction.findMany({
+            where : {userId : data.id}
+        });
+
+        if(listings.length === 0 && chats.length === 0 && transactions.length === 0){
+            await prisma.user.delete({where : {id: data.id}});
+        }else{
+            await prisma.listing.updateMany({
+                where : {ownerId : data.id},
+                data : {status : "inactive"}
+            });
+        }
        
     },
 )
 
 // Create an empty array where we'll export future Inngest functions
 export const functions = [
-    syncUserCreation
+    syncUserCreation,
+    syncUserDeletion
 ];
