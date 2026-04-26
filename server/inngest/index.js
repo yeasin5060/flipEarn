@@ -10,7 +10,7 @@ const syncUserCreation = inngest.createFunction(
   async ({ event }) => {
     const { data } = event;
 
-    const user = await prisma.user.findFirst({
+    const user = await prisma.user.findUnique({
       where: { id: data.id },
     });
 
@@ -18,10 +18,9 @@ const syncUserCreation = inngest.createFunction(
       await prisma.user.update({
         where: { id: data.id },
         data: {
-          email: data?.email_addresses[0].email_address,
-          name: data?.first_name + " " + data?.last_name,
-          imageUrl: data?.image_url,
-          image: data?.image_url, 
+          email: data?.email_addresses?.[0]?.email_address,
+          name: `${data?.first_name || ""} ${data?.last_name || ""}`.trim(),
+          image: data?.image_url,
         },
       });
       return;
@@ -30,10 +29,9 @@ const syncUserCreation = inngest.createFunction(
     await prisma.user.create({
       data: {
         id: data.id,
-        email: data?.email_addresses[0].email_address,
-        name: data?.first_name + " " + data?.last_name,
-        imageUrl: data?.image_url,
-        image: data?.image_url, 
+        email: data?.email_addresses?.[0]?.email_address,
+        name: `${data?.first_name || ""} ${data?.last_name || ""}`.trim(),
+        image: data?.image_url,
       },
     });
   }
