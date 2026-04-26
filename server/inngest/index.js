@@ -1,5 +1,5 @@
 import { Inngest } from "inngest";
-import { prisma } from "../src/db";
+import { prisma } from "../src/db.js";
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "profile-marketplace" });
