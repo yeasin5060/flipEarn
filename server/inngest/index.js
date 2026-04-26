@@ -6,34 +6,37 @@ export const inngest = new Inngest({ id: "profile-marketplace" });
 
 const syncUserCreation = inngest.createFunction(
   { id: "sync-user-from-clerk", triggers: [{ event: "clerk/user.created" }] },
-  async ({ event}) => {
-        const { data } = event;
 
-        // Check if user already exists in the database
-        const user = await prisma.user.findFirst({
-            where : {id : data.id}
-        });
-        if(user){
-            //update user data if it exists
-            await prisma.user.update({
-                where : {id : data.id},
-                data : {
-                    email:data?.email_addresses[0].email_address,
-                    name:data?.first_name + " " +data?.last_name,
-                    imageUrl:data?.image_url,
-                }
-            });
-            return;
-        }
-        await prisma.user.create({
-            data : {
-                id: data.id,
-                email:data?.email_addresses[0].email_address,
-                name:data?.first_name + " " +data?.last_name,
-                imageUrl:data?.image_url,
-            }
-        });
-    },
+  async ({ event }) => {
+    const { data } = event;
+
+    const user = await prisma.user.findFirst({
+      where: { id: data.id },
+    });
+
+    if (user) {
+      await prisma.user.update({
+        where: { id: data.id },
+        data: {
+          email: data?.email_addresses[0].email_address,
+          name: data?.first_name + " " + data?.last_name,
+          imageUrl: data?.image_url,
+          image: data?.image_url, 
+        },
+      });
+      return;
+    }
+
+    await prisma.user.create({
+      data: {
+        id: data.id,
+        email: data?.email_addresses[0].email_address,
+        name: data?.first_name + " " + data?.last_name,
+        imageUrl: data?.image_url,
+        image: data?.image_url, 
+      },
+    });
+  }
 );
 
 // ✅ inngest function to the Delete user
@@ -50,7 +53,7 @@ export const syncUserDeletion = inngest.createFunction(
         });
 
         const chats = await prisma.chat.findMany({
-            where : {OR : [{ownerUserId : data.id },{chatUserid : data.id}]}
+            where : {OR : [{ownerUserId : data.id },{chatUserId : data.id}]}
         });
 
          const transactions = await prisma.transaction.findMany({
