@@ -42,35 +42,62 @@ const syncUserCreation = inngest.createFunction(
 // ✅ inngest function to the Delete user
 
 export const syncUserDeletion = inngest.createFunction(
-    {
-        id: "delete-user-with-clerk", triggers: [{ event: "clerk/user.deleted" }],
-    },
-    async ({ event}) => {
-        const { data } = event;
+  {
+    id: "delete-user-with-clerk",
+    triggers: [{ event: "clerk/user.deleted" }],
+  },
 
-        const listings = await prisma.listing.findMany({
-            where : {ownerId : data.id}
+  async ({ event }) => {
+    const { data } = event;
+
+    try {
+      // ✅ Check existence first
+      const user = await prisma.user.findUnique({
+        where: { id: data.id },
+      });
+
+      if (!user) return;
+
+      // ✅ Count instead of findMany (faster)
+      const [listingCount, chatCount, transactionCount] = await Promise.all([
+        prisma.listing.count({ where: { ownerId: data.id } }),
+        prisma.chat.count({
+          where: {
+            OR: [
+              { ownerUserId: data.id },
+              { chatUserId: data.id },
+            ],
+          },
+        }),
+        prisma.transaction.count({ where: { userId: data.id } }),
+      ]);
+
+      // ✅ If no dependencies → delete user
+      if (listingCount === 0 && chatCount === 0 && transactionCount === 0) {
+        await prisma.user.delete({
+          where: { id: data.id },
+        });
+      } else {
+        // ✅ Soft delete (recommended)
+        await prisma.user.update({
+          where: { id: data.id },
+          data: { status: "deleted" }, // 👈 better than doing nothing
         });
 
-        const chats = await prisma.chat.findMany({
-            where : {OR : [{ownerUserId : data.id },{chatUserId : data.id}]}
+        await prisma.listing.updateMany({
+          where: { ownerId: data.id },
+          data: { status: "inactive" },
         });
+      }
 
-         const transactions = await prisma.transaction.findMany({
-            where : {userId : data.id}
-        });
+      return { success: true };
 
-        if(listings.length === 0 && chats.length === 0 && transactions.length === 0){
-            await prisma.user.delete({where : {id: data.id}});
-        }else{
-            await prisma.listing.updateMany({
-                where : {ownerId : data.id},
-                data : {status : "inactive"}
-            });
-        }
-       
-    },
-)
+    } catch (error) {
+      console.error("Delete sync error:", error);
+      return { success: false, message: error.message };
+    }
+  }
+);
 
 // ✅ inngest function to the Update user
 export const syncUserUpdation = inngest.createFunction(
