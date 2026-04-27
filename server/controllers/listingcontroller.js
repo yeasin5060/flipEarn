@@ -163,3 +163,36 @@ export const updateListing = async (req , res) => {
         return res.status(500).json({message : error.message});
     }
 }
+
+//Controller for toggleStatus
+
+export const toggleStatus = async (req , res) => {
+    try {
+        const {id} = req.params;
+        const {userId} = await req.auth();
+        
+        const listing = await prisma.listing.findUnique({
+            where : {id , ownerId : userId},
+        });
+
+        if(!listing){
+            return res.status(404).json({message : 'Listing not Found'});
+        }
+
+        if(listing.status === 'active' || listing.status === 'inactive'){
+            await prisma.listing.update({
+                where : {id , ownerId : userId},
+                data : {status : listing.status === 'active' ? 'inactive' : 'active'}
+            });
+        }else if(listing.status === 'ban'){
+            return res.status(400).json({message : 'Your listing is banned'});
+        }else if(listing.status === 'sold'){
+            return res.status(400).json({message : 'Your listing is sold'});
+        }
+
+        return res.status(200).json({message : 'Listing status update successfully' , listing});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message : error.message});
+    }
+}
