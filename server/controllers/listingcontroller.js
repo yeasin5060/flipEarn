@@ -21,7 +21,11 @@ export const listing = async (req,res)=> {
         accountDetails.platform = accountDetails.platform.toLowerCase();
         accountDetails.niche = accountDetails.niche.toLowerCase();
 
-        accountDetails.username.startWith('@') ? accountDetails.username = accountDetails.username.slice(1) : null
+        accountDetails.username.startWith('@') ? accountDetails.username = accountDetails.username.slice(1) : null ;
+        
+        const uploadImages = req.files.map((file)=> {
+            
+        })
     } catch (error) {
         
     }
