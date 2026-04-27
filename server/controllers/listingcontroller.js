@@ -1,6 +1,8 @@
 // Controller for adding listing to database
 
+import imagekit from "../imagekit/imagekit.js";
 import { prisma } from "../src/db.js";
+import fs from 'fs'
 
 export const listing = async (req,res)=> {
     try { 
@@ -23,10 +25,28 @@ export const listing = async (req,res)=> {
 
         accountDetails.username.startWith('@') ? accountDetails.username = accountDetails.username.slice(1) : null ;
         
-        const uploadImages = req.files.map((file)=> {
-            
-        })
+        const uploadImages = req.files.map(async(file)=> {
+            const response = await imagekit.files.upload({
+                file: fs.createReadStream('file.path'),
+                fileName:`${Date.now()}.png`,
+                folder : 'flip-earn',
+                transformation : {pre : 'w-1280 , h-auto'}
+            });
+            return response.url
+        });
+
+        //with for all uploads to complete
+        const images = await Promise.all(uploadImages);
+        const listing = await prisma.listing.create({
+            data : {
+                ownerId : userId,
+                images,
+                ...accountDetails
+            }
+        });
+        return res.status(201).json({message : 'Acount listed successfully' , listing})
     } catch (error) {
-        
+        console.log(error);
+         return res.status(500).json({message : error.message})
     }
 }
