@@ -233,3 +233,39 @@ export const deleteUserListing = async(req,res) => {
         return res.status(500).json({message : error.message});
     }
 }
+
+export const addCredential = async (req , res)=> {
+    try {
+        const {userId} = await req.auth();
+        const {listingId , credential} = req.body;
+
+        if(credential.length === 0 || !listingId){
+            return res.status(400).json({message : 'Missing Feilds'})
+        }
+
+        const listing = await prisma.listing.findFirst({
+            where : {id: listingId , ownerId : userId},
+        });
+
+        if(!listing){
+            return req.status(404).json({message : 'listing not found or you are not the owner'});
+        }
+
+        await prisma.credential.create({
+            data : {
+                listingId,
+                originalCredential : credential
+            }
+        });
+
+        await prisma.listing.update({
+            where : {id : listingId},
+            data : {isCredentialSubmitted : true}
+        });
+
+        return res.status(200).json({message : 'credential added successfully'});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message : error.message});
+    }
+}
