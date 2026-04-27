@@ -50,3 +50,23 @@ export const listing = async (req,res)=> {
          return res.status(500).json({message : error.message})
     }
 }
+
+//Controller for getting all public listing
+
+export const getAllPublicListing = async (req , res) => {
+    try {
+        const listings = await prisma.listing.findMany({
+            where : {status : 'active'},
+            include : {owner : true},
+            orderBy : {createdAt : 'desc'}
+        });
+
+        if(!listings || listings.length === 0){
+            return res.json({listings : []});
+        }
+        return res.status(200).json({listings});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message : error.message})
+    }
+}
