@@ -47,7 +47,7 @@ export const listing = async (req,res)=> {
         return res.status(201).json({message : 'Acount listed successfully' , listing})
     } catch (error) {
         console.log(error);
-         return res.status(500).json({message : error.message})
+         return res.status(500).json({message : error.message});
     }
 }
 
@@ -67,7 +67,7 @@ export const getAllPublicListing = async (req , res) => {
         return res.status(200).json({listings});
     } catch (error) {
         console.log(error);
-        return res.status(500).json({message : error.message})
+        return res.status(500).json({message : error.message});
     }
 }
 
@@ -99,6 +99,67 @@ export const getAllUserListing = async (req , res) => {
          return res.status(200).json({listings, balance});
     } catch (error) {
         console.log(error);
-        return res.status(500).json({message : error.message})
+        return res.status(500).json({message : error.message});
+    }
+}
+
+//Controller for updating listing in database
+
+export const updateListing = async (req , res) => {
+    try {
+        const {userId} = await req.auth();
+        const accountDetails = JSON.parse(req.body.accountDetails);
+
+        if(req.files.length + accountDetails.images.length > 5){
+            return res.status(400).json({message : 'You can only upload up to 5 images'});
+        }
+
+        accountDetails.followers_count = parseFloat( accountDetails.followers_count);
+        accountDetails.engagement_rate = parseFloat( accountDetails.engagement_rate);
+        accountDetails.monthly_views = parseFloat( accountDetails.monthly_views);
+        accountDetails.price = parseFloat( accountDetails.price);
+        accountDetails.platform = accountDetails.platform.toLowerCase();
+        accountDetails.niche = accountDetails.niche.toLowerCase();
+
+        accountDetails.username.startWith('@') ? accountDetails.username = accountDetails.username.slice(1) : null ;
+
+        const listing = await prisma.listing.update({
+            where : {id : accountDetails.id , ownerId : userId},
+            data : accountDetails
+        });
+
+        if(!listing){
+            return res.status(404).json({message : 'Listing not Found'});
+        }
+
+        if(listing.status === 'sold'){
+            return res.status(400).json({message : "You can't update sold listing"});
+        }
+
+        if(req.files.length > 0){
+            const uploadImages = req.files.map(async(file)=> {
+                const response = await imagekit.files.upload({
+                    file: fs.createReadStream('file.path'),
+                    fileName:`${Date.now()}.png`,
+                    folder : 'flip-earn',
+                    transformation : {pre : 'w-1280 , h-auto'}
+                });
+                return response.url
+            });
+            const images = await Promise.all(uploadImages);
+            const listing = await prisma.listing.update({
+                where : {id : accountDetails.id , ownerId : userId},
+                data : {
+                    ownerId : userId,
+                    ...accountDetails,
+                    images : [...accountDetails.images, ...images]
+                }
+            });
+            return res.status(200).json({message : "image Update successfully" , listing});
+        }
+        return res.status(200).json({message : "Account Update successfully" , listing});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message : error.message});
     }
 }
