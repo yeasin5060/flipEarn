@@ -196,3 +196,40 @@ export const toggleStatus = async (req , res) => {
         return res.status(500).json({message : error.message});
     }
 }
+
+//Controller for delete user listing
+
+export const deleteUserListing = async(req,res) => {
+    try {
+        const {listingId} = req.params;
+        const {userId} = await req.auth();
+
+        const listing = await prisma.listing.findFirst({
+            where: {ownerId : userId},
+            include : {owner : true},
+        });
+
+        if(!listing){
+            return res.status(404).json({message : 'Listing not Found'});
+        }
+
+        if(listing.status === 'sold'){
+            return res.status(400).json({message : "Sold listing can't be deleted"});
+        }
+        //if password has been changed , send the new password to be woner
+        if(listing.isCredentialChanged){
+            //send email to owner
+        }
+
+        await prisma.listing.update({
+            where : {id : listingId},
+            data : {
+                status : 'deleted'
+            }
+        });
+        return res.json({message : 'listing delete successfully'});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message : error.message});
+    }
+}
