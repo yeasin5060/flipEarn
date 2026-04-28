@@ -1,9 +1,8 @@
-// Controller for adding listing to database
-
 import imagekit from "../config/imagekit.js"
 import { prisma } from "../src/db.js";
 import fs from 'fs'
 
+// Controller for adding listing to database
 export const addListing = async (req,res)=> {
     try { 
         const {userId} = await req.auth();

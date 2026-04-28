@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import api from '../../configs/axios';
+import { dummyListings } from '../../assets/assets';
 
 //get all public listing
 
@@ -31,8 +32,8 @@ export const getAllUserListing = createAsyncThunk('listing/getAllUserListing' ,
 const listingSlice = createSlice ({
     name : 'listing',
     initialState : {
-        listings :[],
-        userListings : [],
+        listings :dummyListings,
+        userListings : dummyListings,
         balance : {
             earned : 0,
             withdrawn : 0 ,
