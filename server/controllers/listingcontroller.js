@@ -1,6 +1,6 @@
 // Controller for adding listing to database
 
-import imagekit from "../imagekit/imagekit.js";
+import imagekit from "../config/imagekit.js"
 import { prisma } from "../src/db.js";
 import fs from 'fs'
 
