@@ -276,7 +276,7 @@ export const markFeatured = async (req ,res) => {
         const {userId} = await req.auth();
 
         if(req.plan !== 'premium'){
-            return res.status(400).json({message : 'Premium Feilds required'})
+            return res.status(400).json({message : 'Premium Feilds required'});
         }
 
         //unset all other featured listing
@@ -321,6 +321,41 @@ export const getAllUserOrder = async (req ,res) => {
         });
 
         return res.status(200).json({orders : ordersWithCredentials});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message : error.message});
+    }
+}
+
+export const withdrawnAmount = async (req ,res) => {
+    try {
+        const {userId} = await req.auth();
+        const {amount , account} = req.body;
+
+        const user = await prisma.user.findUnique({
+            where : {id : userId}
+        });
+
+        const balance = user.earned - user.withdrawn;
+
+        if(account > balance){
+            return res.status(400).json({message : 'insufficient balance'});
+        }
+
+        const withdrawn = await prisma.withdrawal.create({
+            data : {
+                userId, amount, account
+            }
+        });
+
+        await prisma.user.update({
+            where : {id : userId},
+            data : {
+                withdrawn : {increment: amount}
+            }
+        });
+
+        return res.json({message : 'Applied for withdrawn' , withdrawn});
     } catch (error) {
         console.log(error);
         return res.status(500).json({message : error.message});
