@@ -307,7 +307,7 @@ export const getAllUserOrder = async (req ,res) => {
         });
 
         if(!orders || orders.length === 0){
-            return res.status(400).json({orders =[]})
+            return res.status(400).json({orders:[]})
         }
 
         //attach the credential to each order

@@ -65,7 +65,7 @@ export const getChat = async (req , res) => {
     }
 }
 
-export const getChat = async (req , res) => {
+export const getAllUserChats = async (req , res) => {
     try {
         const {userId} = await req.auth();
         const chats = await prisma.chat.findMany({
@@ -79,6 +79,49 @@ export const getChat = async (req , res) => {
         }
 
         return res.json({chats})
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message : error.message});
+    }
+}
+
+//controller for adding message to chat
+
+export const sendChatMessage = async (req , res) => {
+    try {
+        const {userId} = await req.auth();
+        const {chatId , message} = req.body;
+
+        const chat = await prisma.chat.findFirst({
+            where :{
+                AND :  [{id: chatId} , {OR : [{chatUserId : userId},{ownerUserId : userId}]}]
+            },
+            include : {listing: true , ownerUser : true , chatUser: true}
+        });
+
+        if(!chat){
+            return res.status(404).json({message : 'Chat not found'});
+        }else if(chat.listing.status !== 'active'){
+            return res.status(400).json({message : `Listing is ${chat.listing.status}`});
+        }
+
+        const newMessage = {
+            message,
+            sender_id : userId,
+            chatId,
+            createAt : new Date()
+        }
+
+        await prisma.message.create({
+            data : newMessage
+        });
+
+        return res.json({message :'message send' , newMessage});
+
+        await prisma.chat.update({
+            where : {id : chatId},
+            data : {lastMessage : newMessage.message , isLastMessageRead : false , lastMessageSenderId : userId}
+        });
     } catch (error) {
         console.log(error);
         return res.status(500).json({message : error.message});
