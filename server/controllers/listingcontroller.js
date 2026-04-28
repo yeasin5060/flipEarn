@@ -297,3 +297,32 @@ export const markFeatured = async (req ,res) => {
         return res.status(500).json({message : error.message});
     }
 }
+
+export const getAllUserOrder = async (req ,res) => {
+    try {
+        const {userId} = await req.auth();
+        let orders = await prisma.transaction.findMany({
+            where : {userId , isPaid : 'true'},
+            include : {listing : true}
+        });
+
+        if(!orders || orders.length === 0){
+            return res.status(400).json({orders =[]})
+        }
+
+        //attach the credential to each order
+        const credentials = await prisma.credential.findMany({
+            listingId : {in : orders.map((order)=> order.listingId)}
+        });
+
+        const ordersWithCredentials = orders.map((order)=> {
+            const credential = credentials.find((cred)=> cred.listingId === order.listingId);
+            return {...order,  credential}
+        });
+
+        return res.status(200).json({orders : ordersWithCredentials});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message : error.message});
+    }
+}
