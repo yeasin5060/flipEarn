@@ -5,6 +5,7 @@ import { clerkMiddleware } from '@clerk/express'
 import { serve } from 'inngest/express'
 import { inngest, functions } from './inngest/index.js'
 import listingRouter from './routes/listingRoute.js'
+import chatRouter from './routes/chatRoute.js'
 
 const app = express();
 
@@ -21,5 +22,6 @@ app.use('/api/inngest',serve({
   })
 );
 app.use('/api/listing', listingRouter);
+app.use('/api/chat', chatRouter);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
