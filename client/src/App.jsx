@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Route, Routes, useLocation } from "react-router-dom"
 import Home from "./pages/Home"
 import MarketPlace from "./pages/MarketPlace"
@@ -19,9 +19,25 @@ import CredentialChange from "./pages/admin/CredentialChange"
 import AllListings from "./pages/admin/AllListings"
 import Transactions from "./pages/admin/Transactions"
 import Withdrawal from "./pages/admin/Withdrawal"
+import { useAuth, useUser } from "@clerk/clerk-react"
+import { useDispatch } from "react-redux"
+import { getAllPublicListing, getAllUserListing } from "./app/features/listingSlice"
 
 function App() {
-  const {pathname} = useLocation()
+  const {pathname} = useLocation();
+  const {getToken} = useAuth();
+  const {user , isLoaded} = useUser();
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    dispatch(getAllPublicListing());
+  },[]);
+
+  useEffect(()=>{
+    if(isLoaded && user){
+      dispatch(getAllUserListing({getToken}));
+    }
+  },[user , isLoaded]);
   return (
     <div>
       <Toaster/>

@@ -43,6 +43,16 @@ const listingSlice = createSlice ({
         setListings : (state , action)=> {
             state.listings = action.payload
         }
+    },
+    extraReducers : (builder)=> {
+        builder.addCase(getAllPublicListing.fulfilled, (state , action)=> {
+            state.listings = action.payload.listings;
+        });
+
+        builder.addCase(getAllUserListing.fulfilled, (state , action)=> {
+            state.userListings = action.payload.listings;
+            state.balance = action.payload.balance;
+        });
     }
 });
 
