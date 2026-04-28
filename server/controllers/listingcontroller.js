@@ -4,7 +4,7 @@ import imagekit from "../imagekit/imagekit.js";
 import { prisma } from "../src/db.js";
 import fs from 'fs'
 
-export const listing = async (req,res)=> {
+export const addListing = async (req,res)=> {
     try { 
         const {userId} = await req.auth();
         if(req.plan !== 'premium'){
@@ -356,6 +356,15 @@ export const withdrawnAmount = async (req ,res) => {
         });
 
         return res.json({message : 'Applied for withdrawn' , withdrawn});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message : error.message});
+    }
+}
+
+export const purchaseAmount = async (req ,res) => {
+    try {
+        
     } catch (error) {
         console.log(error);
         return res.status(500).json({message : error.message});

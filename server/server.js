@@ -4,6 +4,7 @@ import cors from 'cors'
 import { clerkMiddleware } from '@clerk/express'
 import { serve } from 'inngest/express'
 import { inngest, functions } from './inngest/index.js'
+import listingRouter from './routes/listingRoute.js'
 
 const app = express();
 
@@ -19,5 +20,6 @@ app.use('/api/inngest',serve({
     functions,
   })
 );
+app.use('/api/listing', listingRouter);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
