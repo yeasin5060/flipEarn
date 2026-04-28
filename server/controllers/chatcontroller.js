@@ -3,7 +3,7 @@
 
 import { prisma } from "../src/db.js";
 
-export const getCart = async (req , res) => {
+export const getChat = async (req , res) => {
     try {
         const {userId} = await req.auth();
         const {listingId , chatId} = req.body;
@@ -60,7 +60,27 @@ export const getCart = async (req , res) => {
         });
         return res.json({chat : chatWithData});
     } catch (error) {
-     console.log(error);
+        console.log(error);
+        return res.status(500).json({message : error.message});
+    }
+}
+
+export const getChat = async (req , res) => {
+    try {
+        const {userId} = await req.auth();
+        const chats = await prisma.chat.findMany({
+            where : {OR : [{chatUserId : userId} , {ownerUserId : userId}]},
+            include : {listing: true , ownerUser : true , chatUser: true},
+            orderBy : {updatedAt : 'desc'}
+        });
+
+        if(!chats || chats.length === 0){
+            return res.json({chats:[]})
+        }
+
+        return res.json({chats})
+    } catch (error) {
+        console.log(error);
         return res.status(500).json({message : error.message});
     }
 }
