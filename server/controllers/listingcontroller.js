@@ -269,3 +269,31 @@ export const addCredential = async (req , res)=> {
         return res.status(500).json({message : error.message});
     }
 }
+
+export const markFeatured = async (req ,res) => {
+    try {
+        const {id} = req.params;
+        const {userId} = await req.auth();
+
+        if(req.plan !== 'premium'){
+            return res.status(400).json({message : 'Premium Feilds required'})
+        }
+
+        //unset all other featured listing
+        await prisma.listing.updateMany({
+            where : {ownerId : userId},
+            data : {featured : false}
+        });
+
+        // Mark the listing as featured
+         await prisma.listing.update({
+            where : {id},
+            data : {featured : true}
+        });
+
+        return res.status(200).json({message : 'Listing marked as featured successfully'});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message : error.message});
+    }
+}
