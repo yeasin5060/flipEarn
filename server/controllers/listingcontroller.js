@@ -22,11 +22,11 @@ export const addListing = async (req,res)=> {
         accountDetails.platform = accountDetails.platform.toLowerCase();
         accountDetails.niche = accountDetails.niche.toLowerCase();
 
-        accountDetails.username.startWith('@') ? accountDetails.username = accountDetails.username.slice(1) : null ;
+        accountDetails.username.startsWith('@') ? accountDetails.username = accountDetails.username.slice(1) : null ;
         
         const uploadImages = req.files.map(async(file)=> {
             const response = await imagekit.files.upload({
-                file: fs.createReadStream('file.path'),
+                file: fs.createReadStream(file.path),
                 fileName:`${Date.now()}.png`,
                 folder : 'flip-earn',
                 transformation : {pre : 'w-1280 , h-auto'}
@@ -120,7 +120,7 @@ export const updateListing = async (req , res) => {
         accountDetails.platform = accountDetails.platform.toLowerCase();
         accountDetails.niche = accountDetails.niche.toLowerCase();
 
-        accountDetails.username.startWith('@') ? accountDetails.username = accountDetails.username.slice(1) : null ;
+        accountDetails.username.startsWith('@') ? accountDetails.username = accountDetails.username.slice(1) : null ;
 
         const listing = await prisma.listing.update({
             where : {id : accountDetails.id , ownerId : userId},

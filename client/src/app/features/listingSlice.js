@@ -20,7 +20,7 @@ export const getAllPublicListing = createAsyncThunk('listing/getAllPublicListing
 export const getAllUserListing = createAsyncThunk('listing/getAllUserListing' , 
     async ({getToken}) => {
         try {
-            const token = getToken();
+            const token = await getToken();
             const {data} = await api.get('/api/listing/user' , {headers : {Authorization : `Bearer ${token}`}});
             return data;
         } catch (error) {
@@ -32,8 +32,8 @@ export const getAllUserListing = createAsyncThunk('listing/getAllUserListing' ,
 const listingSlice = createSlice ({
     name : 'listing',
     initialState : {
-        listings :dummyListings,
-        userListings : dummyListings,
+        listings :[],
+        userListings :[],
         balance : {
             earned : 0,
             withdrawn : 0 ,

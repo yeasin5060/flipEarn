@@ -5,8 +5,7 @@ import toast from 'react-hot-toast';
 import {Loader2Icon, Upload, X} from 'lucide-react'
 import { useAuth } from '@clerk/clerk-react';
 import api from '../configs/axios';
-import { getAllUserListing } from '../app/features/listingSlice';
-import { getAllPublicListing } from '../../../server/controllers/listingcontroller';
+import { getAllPublicListing, getAllUserListing } from '../app/features/listingSlice';
 
 const ManageListing = () => {
   const {id} = useParams();
@@ -96,7 +95,7 @@ const ManageListing = () => {
 
         dispatch(getAllUserListing({getToken}));
         dispatch(getAllPublicListing());
-        navigate('my-listings');
+        navigate('/my-listing');
       }else{
         delete dataCopy.images;
         const formDataInstance = new FormData();
@@ -112,7 +111,7 @@ const ManageListing = () => {
 
         dispatch(getAllUserListing({getToken}));
         dispatch(getAllPublicListing());
-        navigate('my-listings');
+        navigate('/my-listing');
       }
     } catch (error) {
       toast.dismissAll();
