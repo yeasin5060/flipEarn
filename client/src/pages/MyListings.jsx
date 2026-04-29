@@ -79,7 +79,22 @@ const MyListings = () => {
   }
 
   const deleteListing = async (listingId) => {
+    try {
+      const confirm = window.confirm('Are you sure you want cto delete this listing? if credentials are changed,new credentials will be send to your email ')
+      if(!confirm) return;
+      toast.loading('Deleting Listing..');
+      const token = await getToken();
+      const {data} = await api.delete(`/api/listing/${listingId}`,{headers : {Authorization : `Bearer ${token}`}});
 
+      dispatch(getAllUserListing({getToken}));
+      dispatch(getAllPublicListing());
+
+      toast.dismissAll();
+      toast.success(data.message);
+    } catch (error) {
+      toast.dismissAll();
+      toast.error(error?.response?.data?.message||error.message)
+    }
   }
 
   const markAsFeatured = async (listingId) => {
