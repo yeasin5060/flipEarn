@@ -3,21 +3,37 @@ import { dummyOrders, platformIcons } from '../assets/assets';
 import toast from 'react-hot-toast';
 import { CheckCircle2, ChevronDown, ChevronUp, Copy, Loader2Icon } from 'lucide-react';
 import {format} from 'date-fns';
+import { useAuth, useUser } from '@clerk/clerk-react';
+import api from '../configs/axios';
 
 const MyOrders = () => {
+  const{user,isLoaded} = useUser();
+  const{getToken} = useAuth();
   const currency = import.meta.env.VITE_CURRENCY || '$';
   const [orders , setOrders] = useState([]);
   const [loding , setLoding] = useState(true);
   const [expendedId , setExpendedId] = useState(null);
 
   const fetchOrder = async () => {
-    setOrders(dummyOrders);
-    setLoding(false);
+    try {
+      setLoding(true);
+      const token = await getToken();
+
+      const {data} = await api.get('api/listing/user-orders',{headers : {Authorization : `Bearer ${token}`}});
+      setOrders(data.orders);
+    } catch (error) {
+      console.log(error.message);
+      toast.error(error?.response?.data?.message||error.message);
+    }finally{
+      setLoding(false);
+    }
   };
 
   useEffect(()=> {
-    fetchOrder();
-  },[]);
+    if(user && isLoaded){
+      fetchOrder();
+    }
+  },[isLoaded,user]);
 
   const mask = (val , type) => {
     if(!val && val !== 0) return '_';

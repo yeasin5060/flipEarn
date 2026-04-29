@@ -42,7 +42,8 @@ const WithdrawModel = ({onClose}) => {
       dispatch(getAllUserListing({getToken}));
       onClose();
     } catch (error) {
-      
+      console.log(error.message);
+      toast.error(error?.response?.data?.message||error.message);
     }
   };
 

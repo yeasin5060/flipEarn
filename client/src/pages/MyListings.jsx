@@ -110,7 +110,7 @@ const MyListings = () => {
       toast.success(data.message);
     } catch (error) {
       toast.dismissAll();
-      toast.error(error?.response?.data?.message||error.message)
+      toast.error(error?.response?.data?.message||error.message);
     }
   }
   return (
