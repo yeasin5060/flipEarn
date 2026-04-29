@@ -63,7 +63,7 @@ const MyListings = () => {
 
   const toggleStatus = async (listingId) => {
     try {
-      toast.loading('Updating Listing status');
+      toast.loading('Updating Listing status...');
       const token = await getToken();
       const {data} = await api.put(`/api/listing/${listingId}/status`,{},{headers : {Authorization : `Bearer ${token}`}});
 
@@ -82,7 +82,7 @@ const MyListings = () => {
     try {
       const confirm = window.confirm('Are you sure you want cto delete this listing? if credentials are changed,new credentials will be send to your email ')
       if(!confirm) return;
-      toast.loading('Deleting Listing..');
+      toast.loading('Deleting Listing...');
       const token = await getToken();
       const {data} = await api.delete(`/api/listing/${listingId}`,{headers : {Authorization : `Bearer ${token}`}});
 
@@ -98,7 +98,20 @@ const MyListings = () => {
   }
 
   const markAsFeatured = async (listingId) => {
+    try {
+      toast.loading('Featuring Listing...');
+      const token = await getToken();
+      const {data} = await api.put(`/api/listing/featured/${listingId}`,{},{headers : {Authorization : `Bearer ${token}`}});
 
+      dispatch(getAllUserListing({getToken}));
+      dispatch(getAllPublicListing());
+
+      toast.dismissAll();
+      toast.success(data.message);
+    } catch (error) {
+      toast.dismissAll();
+      toast.error(error?.response?.data?.message||error.message)
+    }
   }
   return (
     <div className='px-6 md:px-16 lg:px-24 xl:px-32 pt-8'>
