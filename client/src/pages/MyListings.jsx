@@ -18,9 +18,9 @@ const MyListings = () => {
   const {getToken} = useAuth();
   const dispatch = useDispatch();
 
-  const totalValue = userListings.reduce((sum , listing)=> sum + (listing.price || 0), 0);
-  const activeListings = userListings.filter((listing)=> listing.status === 'active').length;
-  const soldListings = userListings.filter((listing)=> listing.status === 'sold').length;
+  const totalValue = (userListings || []).reduce((sum , listing)=> sum + (listing.price || 0), 0);
+  const activeListings = (userListings || []).filter((listing)=> listing.status === 'active').length;
+  const soldListings = userListings?.filter((listing)=> listing.status === 'sold').length;
 
   const [showCredentialSubmission , setShowCredrentialSubmission] = useState(null);
   const [showWithdrawal , setShowWithdrawal] = useState(null);
@@ -128,7 +128,7 @@ const MyListings = () => {
       </div>
       {/*stats */}
       <div className='grid grid-cols-1 md:grid-cols-4 gap-6 mb-8'>
-        <StatCard title='Total Listing' value={userListings.length} icon={<Eye className='size-6 text-indigo-600'/>} color='indigo'/>
+        <StatCard title='Total Listing' value={userListings?.length} icon={<Eye className='size-6 text-indigo-600'/>} color='indigo'/>
 
         <StatCard title='Active Listing' value={activeListings} icon={<CheckCircle className='size-6 text-green-600'/>} color='green'/>
 
@@ -140,9 +140,9 @@ const MyListings = () => {
       <div className='flex flex-col sm:flex-row justify-between gap-4 xl:gap-20 p-6 mb-10 bg-white rounded-xl broder border-gray-200'>
         {
           [
-            {lable: 'Earned', value: balance.earned, icon: WalletIcon},
-            {lable: 'Withdrawn', value: balance.withdrawn, icon: ArrowDownCircleIcon},
-            {lable: 'Available', value: balance.available, icon: CoinsIcon}
+            {lable: 'Earned', value: balance?.earned, icon: WalletIcon},
+            {lable: 'Withdrawn', value: balance?.withdrawn, icon: ArrowDownCircleIcon},
+            {lable: 'Available', value: balance?.available, icon: CoinsIcon}
           ].map((item, index)=>(
             <div onClick={()=> item.lable === 'Available' && setShowWithdrawal(true)} key={index} className='flex flex-1 items-center justify-between p-4 rounded-lg border border-gray-100 cursor-pointer'>
               <div className='flex items-center gap-3'>
@@ -151,7 +151,7 @@ const MyListings = () => {
               </div>
               <span className='text-xl font-medium text-gray-700'>
                 {currency}
-                {item.value.toFixed(2)}
+                {(item.value || 0).toFixed(2)}
               </span>
             </div>
           ))
@@ -159,7 +159,7 @@ const MyListings = () => {
       </div>
       {/*Listings */}
       {
-        userListings.length === 0 ? 
+        userListings?.length === 0 ? 
         (
           <div className='bg-white rounded-lg border border-gray-200 p-16 text-center'>
             <div className='w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4'>
@@ -172,7 +172,7 @@ const MyListings = () => {
         ):
         (
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-            {userListings.map((listing)=>(
+            {userListings?.map((listing)=>(
               <div className='bg-white rounded-lg border border-gray-200 hover:shadow-lg shadow-gray-200/70 transition-shadow' key={listing.id}>
                 <div className='p-6'>
                   <div className='flex items-start gap-4 justify-between mb-4'> 

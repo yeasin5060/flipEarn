@@ -36,6 +36,10 @@ const ChatBox = () => {
     useEffect(()=> {
         if (listing) {
             fetchChat();
+            const interval = setInterval(()=>{
+                fetchChat();   
+            },3000)
+            return ()=> clearInterval(interval);
         }
     },[listing]);
 
