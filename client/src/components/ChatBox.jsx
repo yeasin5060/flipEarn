@@ -4,21 +4,33 @@ import { dummyChats } from '../assets/assets';
 import { Loader2Icon, Send, X } from 'lucide-react';
 import { clearChat } from '../app/features/chatSlice.js';
 import {format} from 'date-fns'
+import toast from 'react-hot-toast';
+import { useAuth, useUser } from '@clerk/clerk-react';
+import api from '../configs/axios.js';
 
 const ChatBox = () => {
+    const {getToken} = useAuth();
+    const{user} = useUser();
     const dispatch = useDispatch();
     const {listing ,isOpen , chatId} = useSelector((state)=> state.chat);
-    const user = {id : 'user_2'} ;
     const [chat , setchat] = useState(null);
     const [messages , setMessages] = useState([]);
     const [newMessage , setNewMessage] = useState('');
     const [isLoding , setIsLoding] = useState(true);
     const [isSending , setIsSending] = useState(false);
 
-    const fetchChat = ()=> {
-        setchat(dummyChats[0]);
-        setMessages(dummyChats[0].messages);
-        setIsLoding(false);
+    const fetchChat = async ()=> {
+       try {
+            const token = await getToken();
+            const { data} = await api.post('/api/chat',{listingId: listing.id , chatId},{headers : {Authorization : `Bearer ${token}`}});
+            console.log(data);
+            setchat(data?.chat);
+            setMessages(data?.chat?.messages || []);
+            setIsLoding(false);
+       } catch (error) {
+            console.log(error.message);
+            toast.error(error?.response?.data?.message||error.message);
+       }
     };
 
     useEffect(()=> {
@@ -49,8 +61,18 @@ const ChatBox = () => {
      const handleSendMessage = async (e)=> {
         e.preventDefault();
         if(!newMessage.trim()|| isSending) return;
-        setMessages([...messages,{id : Date.now(), chatId : chat.id, sender_id : user.id, messages : newMessage , createdAt : new Date()}]);
-        setNewMessage('');
+        try {
+            setIsSending(true);
+            const token = await getToken();
+            const { data} = await api.post('/api/chat/send-message',{chatId: chat.id , message:newMessage},{headers : {Authorization : `Bearer ${token}`}});
+            setMessages([...messages , data.newMessage]);
+            setNewMessage('');
+            setIsSending(false);
+        } catch (error) {
+            console.log(error.message);
+            toast.error(error?.response?.data?.message||error.message);
+            setIsSending(false);
+        }
      }
 
     if(!isOpen || !listing) return null;
@@ -89,7 +111,7 @@ const ChatBox = () => {
                         messages.map((message)=> (
                             <div key={message.id} className={`flex ${message.sender_id === user.id ? 'justify-end' : 'justify-start'}`}>
                                 <div className={`max-w-[70%] rounded-lg p-3 pb-1 ${message.sender_id === user.id ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-200 text-gray-800'}`}>
-                                    <p className='text-sm whitespace-pre-wrap break-words'>{message.messages}</p>
+                                    <p className='text-sm whitespace-pre-wrap break-words'>{message.message}</p>
                                     <p className={`text-[10px] mt-1 ${message.sender_id === user.id ? 'text-indigo-200': 'text-gray-400'}`}>{format(new Date(message.createdAt), "MMM dd 'at' h:mm a")}</p>
                                 </div>
                             </div>

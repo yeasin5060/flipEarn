@@ -16,7 +16,7 @@ export const getChat = async (req , res) => {
             return res.status(404).json({message : 'Listing not Found'});
         }
 
-        //fiend existing chart
+        //fiend existing chat
         let existingChat = null;
 
         if(chatId){
@@ -32,16 +32,16 @@ export const getChat = async (req , res) => {
         }
 
         if(existingChat){
-            return res.json({chat : existingChat});
+            res.json({chat : existingChat});
             if(existingChat.isLastMessageRead === false){
                 const lastMessage = existingChat.messages[existingChat.messages.length -1];
                 const isLastMessageSendByMe = lastMessage.sender_id === userId ;
-                if(!isLastMessageSendByMe){{
+                if(!isLastMessageSendByMe){
                     await prisma.chat.update({
                         where : {id : existingChat.id},
                         data : {isLastMessageRead : true}
                     });
-                }}
+                }
             }
             return null
         }
@@ -109,14 +109,14 @@ export const sendChatMessage = async (req , res) => {
             message,
             sender_id : userId,
             chatId,
-            createAt : new Date()
+            createdAt : new Date()
         }
 
         await prisma.message.create({
             data : newMessage
         });
 
-        return res.json({message :'message send' , newMessage});
+         res.json({message :'message send' , newMessage});
 
         await prisma.chat.update({
             where : {id : chatId},

@@ -34,7 +34,7 @@ function App() {
   },[]);
 
   useEffect(()=>{
-    if(isLoaded && user){
+    if(user && isLoaded){
       dispatch(getAllUserListing({getToken}));
     }
   },[user , isLoaded]);

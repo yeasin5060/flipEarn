@@ -12,7 +12,7 @@ import api from '../configs/axios';
 import { getAllPublicListing, getAllUserListing } from '../app/features/listingSlice';
 
 const MyListings = () => {
-  const {userListings ,  balance } = useSelector((state)=> state.listing);
+  const {userListings , balance } = useSelector((state)=> state.listing);
   const currency = import.meta.env.VITE_CURRENCY  || '$';
   const navigate = useNavigate();
   const {getToken} = useAuth();
