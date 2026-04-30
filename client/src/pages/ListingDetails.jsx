@@ -59,7 +59,7 @@ const ListingDetails = () => {
                     </Link>
                   </h2>
                   <p className='text-gray-500 text-sm'>
-                    @{listing.username} . {listing.platform?.charAt().toUpperCase() + listing.platform.slice(1)}
+                    @{listing.username}.{listing.platform?.charAt().toUpperCase() + listing.platform.slice(1)}
                   </p>
                   <div className='flex gap-2 mt-2'>
                     {listing.verified &&(
