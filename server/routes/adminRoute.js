@@ -5,7 +5,7 @@ import { changeCredentia, changeStatus, getAllListings, getAllTransaction, getAl
 
 const adminRouter = express.Router();
 
-adminRouter.get('/admin' , protectAdmin , isAdmin);
+adminRouter.get('/isAdmin' , protectAdmin , isAdmin);
 adminRouter.get('/deshboard' , protectAdmin , getDashboard);
 adminRouter.get('/all-listings' , protectAdmin , getAllListings);
 adminRouter.put('/change-status/:listingId' , protectAdmin , changeStatus);
