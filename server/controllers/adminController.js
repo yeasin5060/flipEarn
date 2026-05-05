@@ -188,3 +188,34 @@ export const changeCredentia = async (req,res)=> {
         return res.status(400).json({message : error.message});
     }
 }
+
+//get all transactions
+export const isAdmin = async (req,res)=> {
+    try {
+        const transactions = await prisma.transaction.findMany({
+            where : {isPaid : true},
+            orderBy : {createdAt : 'desc'},
+            include : {listing : {include : {owner : true}}}
+        });
+
+        const customers = await prisma.user.findMany({
+            where : {id : {in : transactions.map((t)=>t.userId)}},
+            select : {id : true , email : true , name : true, image : true}
+        });
+
+        transactions.forEach((t)=> {
+            const customer = customers.find((c)=> c.id === t.userId);
+            t.listing.customer = {...customer}
+        });
+
+        if(!transactions || transactions.length === 0){
+            return res.json({transactions:[]});
+        }
+
+        return res.json({transactions});
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({message : error.message});
+    }
+}
+
