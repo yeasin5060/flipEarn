@@ -60,7 +60,7 @@ export const getAllListings = async (req,res)=> {
 //change listing status
 export const changeStatus = async (req,res)=> {
     try {
-        const {listingId} = reqy.params;
+        const {listingId} = req.params;
         const {status} = req.body;
 
         const listing = await prisma.listing.findUnique({
@@ -100,6 +100,25 @@ export const getAllUnverifiedListings = async (req,res)=> {
         }
 
         return res.json({listings})
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({message : error.message});
+    }
+}
+
+//controller for getting credential
+export const getCredential = async (req,res)=> {
+    try {
+        const {listingId} = req.params;
+        const credential = await prisma.credential.findFirst({
+            where : {listingId}
+        });
+
+        if(!credential){
+            return res.status(404).json({message :'Credential not found'});
+        }
+
+        return res.json({credential});
     } catch (error) {
         console.log(error);
         return res.status(400).json({message : error.message});
