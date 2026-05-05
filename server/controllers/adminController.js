@@ -56,3 +56,30 @@ export const getAllListings = async (req,res)=> {
         return res.status(400).json({message : error.message});
     }
 }
+
+//change listing status
+export const changeStatus = async (req,res)=> {
+    try {
+        const {listingId} = reqy.params;
+        const {status} = req.body;
+
+        const listing = await prisma.listing.findUnique({
+            where : {id : listingId}
+        });
+
+        if(!listing){
+            return res.status(404).json({message :'Listing not found'});
+        }
+
+        await prisma.listing.update({
+            where : {id: listingId},
+            data : {status}
+        });
+
+        return res.json({message : 'Listing status updated'});
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({message : error.message});
+    }
+}
+
