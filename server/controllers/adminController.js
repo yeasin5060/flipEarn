@@ -125,4 +125,20 @@ export const getCredential = async (req,res)=> {
     }
 }
 
+//mark credential as verified
+export const markCredentialVerified = async (req,res)=> {
+    try {
+        const {listingId} = req.params;
+        
+        await prisma.listing.update({
+            where : {id:listingId},
+            data : {isCredentialVerified: true}
+        });
+
+         return res.json({message : 'Credential mark as verified'});
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({message : error.message});
+    }
+}
 
