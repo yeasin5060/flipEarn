@@ -83,3 +83,27 @@ export const changeStatus = async (req,res)=> {
     }
 }
 
+//controller for getting all unverified listing with credential submited
+export const getAllUnverifiedListings = async (req,res)=> {
+    try {
+         const listings = await prisma.listing.findMany({
+            where : {
+                isCredentialSubmitted : true,
+                isCredentialVerified : false,
+                status : {not : 'deleted'}
+            },
+            orderBy : {createdAt : 'desc'},
+        });
+
+        if(!listings || listings.length === 0){
+            return res.json({listings:[]});
+        }
+
+        return res.json({listings})
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({message : error.message});
+    }
+}
+
+
