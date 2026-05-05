@@ -164,3 +164,27 @@ export const getAllUnchangeListing = async (req,res)=> {
         return res.status(400).json({message : error.message});
     }
 }
+
+//change credential for verified listing
+
+export const changeCredentia = async (req,res)=> {
+    try {
+        const {listingId} = req.params;
+        const {newCredential , credentialId} = req.body;
+
+        await prisma.credential.update({
+            where : { id : credentialId, listingId},
+            data : {updatedCredential : newCredential}
+        });
+
+        await prisma.listing.update({
+            where : {id : listingId},
+            data : {isCredentialChanged : true}
+        });
+
+        return res.json({message : 'Credential change successfully'});
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({message : error.message});
+    }
+}
