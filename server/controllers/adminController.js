@@ -190,7 +190,7 @@ export const changeCredentia = async (req,res)=> {
 }
 
 //get all transactions
-export const isAdmin = async (req,res)=> {
+export const getAllTransaction = async (req,res)=> {
     try {
         const transactions = await prisma.transaction.findMany({
             where : {isPaid : true},
@@ -218,4 +218,25 @@ export const isAdmin = async (req,res)=> {
         return res.status(400).json({message : error.message});
     }
 }
+
+//controller for getting all withdraw request
+export const getAllWithdrawRequest = async (req,res)=> {
+    try {
+       const request = await prisma.withdrawal.findMany({
+            orderBy : {createdAt: 'desc'},
+            include : {user : true}
+       });
+
+        if(!request || request.length === 0){
+            return res.json({request:[]});
+        }
+
+        return res.json({request});
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({message : error.message});
+    }
+}
+
+
 
