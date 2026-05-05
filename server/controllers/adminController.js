@@ -143,7 +143,7 @@ export const markCredentialVerified = async (req,res)=> {
 }
 
 //get all un-chenge listings
-export const getAllUnchangeListing = async (req,res)=> {
+export const getAllUnchangeListings = async (req,res)=> {
     try {
         const listings = await prisma.listing.findMany({
             where : { 

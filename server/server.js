@@ -6,6 +6,7 @@ import { serve } from 'inngest/express'
 import { inngest, functions } from './inngest/index.js'
 import listingRouter from './routes/listingRoute.js'
 import chatRouter from './routes/chatRoute.js'
+import adminRouter from './routes/adminRoute.js'
 
 dotenv.config();
 const app = express();
@@ -28,7 +29,9 @@ app.use('/api/inngest',serve({
     functions,
   })
 );
+
 app.use('/api/listing', listingRouter);
 app.use('/api/chat', chatRouter);
+app.use('/api/admin',adminRouter);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
