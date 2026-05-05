@@ -38,3 +38,21 @@ export const getDashboard = async (req,res)=> {
     }
 }
 
+//controller for getting all listing
+export const getAllListings = async (req,res)=> {
+    try {
+         const listings = await prisma.listing.findMany({
+           orderBy : {createdAt : 'desc'},
+           include : {owner : true}
+        });
+
+        if(!listings || listings.length === 0){
+            return res.json({listings:[]});
+        }
+
+        return res.json({listings})
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({message : error.message});
+    }
+}
