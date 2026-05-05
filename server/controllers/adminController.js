@@ -142,3 +142,25 @@ export const markCredentialVerified = async (req,res)=> {
     }
 }
 
+//get all un-chenge listings
+export const getAllUnchangeListing = async (req,res)=> {
+    try {
+        const listings = await prisma.listing.findMany({
+            where : { 
+                isCredentialVerified: true,
+                isCredentialChanged: false,
+                status : {not : 'deleted'}
+            },
+            orderBy : {createdAt : 'desc'}
+        });
+        
+        if(!listings || listings.length === 0){
+            return res.status(404).json({listings : []});
+        }
+
+        return res.json({listings});
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({message : error.message});
+    }
+}
