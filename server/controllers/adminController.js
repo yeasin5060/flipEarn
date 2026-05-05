@@ -1,3 +1,5 @@
+import { prisma } from "../src/db.js";
+
 //controller for cheking if user is admin
 export const isAdmin = async (req,res)=> {
     try {
@@ -7,3 +9,32 @@ export const isAdmin = async (req,res)=> {
         return res.status(400).json({message : error.message});
     }
 }
+
+
+export const getDashboard = async (req,res)=> {
+    try {
+       const totalListing = await prisma.listing.count({});
+       const transaction = await prisma.transaction.findMany({
+        where : {isPaid : true},
+        select : { amount : true}
+       });
+
+        const totaRevenue = transaction.reduce((total,transaction)=> total + transaction.amount,0);
+        const activeListing = await prisma.listing.count({
+            where : {status : 'active'}
+        });
+
+        const totalUser = await prisma.user.count({});
+        const recentListings = await prisma.listing.findMany({
+           orderBy : {createdAt : 'desc'},
+           take: 5,
+           include : {owner : true}
+        });
+
+        return res.json({dashboardData : {totalListing , totaRevenue , activeListing, totalUser , recentListings}});
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({message : error.message});
+    }
+}
+
