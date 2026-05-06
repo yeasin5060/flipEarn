@@ -3,7 +3,6 @@ import AdminTitle from '../../components/admin/AdminTitle';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import ListingDetailsModal from '../../components/admin/ListingDetailsModal';
-import { dummyListings } from '../../assets/assets';
 import { useAuth, useUser } from '@clerk/clerk-react';
 import api from '../../configs/axios';
 import toast from 'react-hot-toast';

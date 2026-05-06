@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { Loader2Icon } from 'lucide-react';
 import CredentialChangeModal from '../../components/admin/CredentialChangeModal';
-import { dummyListings } from '../../assets/assets';
 import { useAuth } from '@clerk/clerk-react';
 import api from '../../configs/axios';
 import toast from 'react-hot-toast';

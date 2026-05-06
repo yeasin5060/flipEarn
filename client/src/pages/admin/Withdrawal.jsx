@@ -2,19 +2,28 @@ import { useEffect, useState } from 'react';
 import { Loader2Icon } from 'lucide-react';
 import AdminTitle from '../../components/admin/AdminTitle';
 import WithdrawalDetail from '../../components/admin/WithdrawalDetail';
-import { dummyWithdrawalRequests } from '../../assets/assets';
+import { useAuth } from '@clerk/clerk-react';
+import api from '../../configs/axios';
 
 const Withdrawal = () => {
     const currency = import.meta.env.VITE_CURRENCY || '$';
+    const {getToken} = useAuth();
 
     const [requests, setRequests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedRequest, setSelectedRequest] = useState(null);
 
     const getRequests = async () => {
-        setRequests(dummyWithdrawalRequests);
-        setIsLoading(false);
-    };
+       try {
+            const token = await getToken();
+            const {data} = await api.get('api/admin/withdraw-requests',{headers : {Authorization : `Bearer ${token}`}});
+            setRequests(data.request);
+            setIsLoading(false);
+       } catch (error) {
+            toast.error(error.message);
+            console.log(error);
+       }
+    }
 
     useEffect(() => {
         getRequests();

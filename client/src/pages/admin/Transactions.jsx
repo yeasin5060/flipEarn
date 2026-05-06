@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import ListingDetailsModal from '../../components/admin/ListingDetailsModal';
 import { Loader2Icon } from 'lucide-react';
-import { dummyOrders } from '../../assets/assets';
 import { useAuth } from '@clerk/clerk-react';
 import api from '../../configs/axios';
 import toast from 'react-hot-toast';
@@ -24,7 +23,7 @@ const Transactions = () => {
             setLoading(false)
         } catch (error) {
             toast.error(error.message);
-            console.log(error)
+            console.log(error);
         }
     };
 
