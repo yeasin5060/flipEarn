@@ -24,9 +24,9 @@ const Dashboard = () => {
     const [showModal, setShowModal] = useState(null);
 
     const dashboardCards = [
-        { title: 'Total Listings', value: dashboardData.totalListings || '0', icon: ChartLineIcon },
-        { title: 'Total Revenue', value: currency + dashboardData.totalRevenue.toLocaleString() || '0', icon: CircleDollarSignIcon },
-        { title: 'Active Listings', value: dashboardData.activeListings || '0', icon: ListIcon },
+        { title: 'Total Listings', value: dashboardData.totalListing || '0', icon: ChartLineIcon },
+        {title: 'Total Revenue', value: `${currency}${(dashboardData.totalRevenue ?? 0).toLocaleString()}`, icon: CircleDollarSignIcon},
+        { title: 'Active Listings', value: dashboardData.activeListing || '0', icon: ListIcon },
         { title: 'Total Users', value: dashboardData.totalUser || '0', icon: UsersIcon },
     ];
 
@@ -41,7 +41,7 @@ const Dashboard = () => {
             console.log(error)
        }
     };
-
+    
     useEffect(() => {
         if(user){
             fetchDashboardData();
