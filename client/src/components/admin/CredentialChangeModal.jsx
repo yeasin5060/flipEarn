@@ -4,9 +4,12 @@ import toast from 'react-hot-toast';
 import { ArrowUpRightFromSquareIcon, CopyIcon, Loader2Icon, XIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { dummyOrders, socialMediaLinks } from '../../assets/assets';
+import { useAuth } from '@clerk/clerk-react';
+import api from '../../configs/axios';
 
 const CredentialChangeModal = ({ listing, onClose }) => {
 
+    const {getToken} = useAuth()
     const [loading, setLoading] = useState(true);
     const [credential, setCredential] = useState(null);
     const [newCredential, setNewCredential] = useState(null);
@@ -18,12 +21,28 @@ const CredentialChangeModal = ({ listing, onClose }) => {
     };
 
     const fetchCredential = async () => {
-        setCredential(dummyOrders[0].credential)
-        setLoading(false);
+       try {
+            const token = await getToken();
+            const {data} = await api.get(`/api/admin/credential/${listing.id}`,{headers : {Authorization : `Bearer ${token}`}});
+            setCredential(data.credential);
+            setNewCredential(data.credential.originalCredential.map((cred) => ({...cred , value:''})));
+            setLoading(false);
+       } catch (error) {
+            toast.error(error.message);
+            console.log(error);
+       }
     };
 
     const changeCredential = async () => {
-
+        try {
+            const token = await getToken();
+            const {data} = await api.put(`/api/admin/change-credential/${listing.id}`,{newCredential,credentialId: credential.id},{headers : {Authorization : `Bearer ${token}`}});
+            toast.success(data.message);
+            toast.dismissAll();
+        } catch (error) {
+            toast.error(error.message);
+            console.log(error);
+        }
     };
 
     useEffect(() => {
