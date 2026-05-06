@@ -26,7 +26,6 @@ const CredentialChange = () => {
        }
     };
 
-    console.log(listings);
     
 
     useEffect(() => {
