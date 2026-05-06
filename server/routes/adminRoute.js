@@ -10,7 +10,7 @@ adminRouter.get('/deshboard' , protectAdmin , getDashboard);
 adminRouter.get('/all-listings' , protectAdmin , getAllListings);
 adminRouter.put('/change-status/:listingId' , protectAdmin , changeStatus);
 adminRouter.get('/unverified-listings' , protectAdmin , getAllUnverifiedListings);
-adminRouter.get('/credential/listingId' , protectAdmin , getCredential);
+adminRouter.get('/credential/:listingId' , protectAdmin , getCredential);
 adminRouter.put('/verify-credential/:listingId' , protectAdmin , markCredentialVerified);
 adminRouter.get('/unchanged-listings' , protectAdmin , getAllUnchangeListings);
 adminRouter.put('/change-credential/:listingId' , protectAdmin , changeCredentia);

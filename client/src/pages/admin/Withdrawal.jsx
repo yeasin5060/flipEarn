@@ -4,6 +4,7 @@ import AdminTitle from '../../components/admin/AdminTitle';
 import WithdrawalDetail from '../../components/admin/WithdrawalDetail';
 import { useAuth } from '@clerk/clerk-react';
 import api from '../../configs/axios';
+import toast from 'react-hot-toast';
 
 const Withdrawal = () => {
     const currency = import.meta.env.VITE_CURRENCY || '$';
