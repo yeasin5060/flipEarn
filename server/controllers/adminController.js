@@ -155,7 +155,7 @@ export const getAllUnchangeListings = async (req,res)=> {
         });
         
         if(!listings || listings.length === 0){
-            return res.status(404).json({listings : []});
+            return res.json({listings : []});
         }
 
         return res.json({listings});
