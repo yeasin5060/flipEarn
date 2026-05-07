@@ -7,9 +7,12 @@ import { inngest, functions } from './inngest/index.js'
 import listingRouter from './routes/listingRoute.js'
 import chatRouter from './routes/chatRoute.js'
 import adminRouter from './routes/adminRoute.js'
+import { stripeWebhook } from './controllers/stripeWebhook.js'
 
 dotenv.config();
 const app = express();
+
+app.use('/api/stripe', express.raw({type : 'application/json'}), stripeWebhook);
 
 app.use(express.json());
 app.use(cors({
