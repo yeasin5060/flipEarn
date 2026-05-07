@@ -1,5 +1,6 @@
 import { Inngest } from "inngest";
 import { prisma } from "../src/db.js";
+import sendEmail from "../config/nodemailer.js";
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "profile-marketplace" });
@@ -117,10 +118,47 @@ export const syncUserUpdation = inngest.createFunction(
   }
 );
 
+const sendPurchaseEmail = inngest.createFunction(
+   {
+    id: "send-purchase-email",
+    triggers: [{ event: "app/purchase" }],
+  },
+
+  async ({ event }) => {
+    const {transaction} = event.data;
+
+    const customer = await prisma.user.findFirst({
+      where : {id:transaction.userId}
+    });
+
+    const listing = await prisma.listing.findFirst({
+      where : {id:transaction.listingId}
+    });
+
+    const credential = await prisma.credential.findFirst({
+      where : {listingId:transaction.listingId}
+    });
+
+    await sendEmail({
+      to : customer.email,
+      subject : 'Your credential fro the account you purchased',
+      html : `<h2>Thank you for purchase account@${listing.username} of ${listing.platform} platform</h2>
+              <p>Here are your credential for the listing you purchase</p>
+              <h3>New Credential</h3>
+              <div>
+                ${credential.updatedCredential.map((cred) => `<p>${cred.name} : ${cred.value}</p>`).join('')}
+              </div>
+              <p>If you have any qustion, please contact as at<a href ='mailto:support@example.com>support@example.com</a></p>
+              `
+    });
+  }
+)
+
 
 // Create an empty array where we'll export future Inngest functions
 export const functions = [
     syncUserCreation,
     syncUserDeletion,
-    syncUserUpdation
+    syncUserUpdation,
+    sendPurchaseEmail
 ];
