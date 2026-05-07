@@ -15,6 +15,6 @@ listingRouter.post('/add-credential', protect, addCredential);
 listingRouter.put('/featured/:id', protect, markFeatured);
 listingRouter.get('/user-orders', protect, getAllUserOrder);
 listingRouter.post('/withdraw', protect, withdrawnAmount);
-listingRouter.post('/purchase-account/:listingId', protect, purchaseAmount);
+listingRouter.get('/purchase-account/:listingId', protect, purchaseAmount);
 
 export default listingRouter;

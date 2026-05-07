@@ -411,7 +411,7 @@ export const purchaseAmount = async (req ,res) => {
                 transactionId : transaction.id,
                 appId : 'flipearn',
             },
-            expires_at : Math.floor(Data.Now() / 1000) + 30 * 60 // expires in 30 minutes
+            expires_at : Math.floor(Date.now() / 1000) + 30 * 60 // expires in 30 minutes
         });
 
          return res.json({paymentLink : session.url});

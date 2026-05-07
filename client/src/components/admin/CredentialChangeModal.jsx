@@ -38,7 +38,6 @@ const CredentialChangeModal = ({ listing, onClose }) => {
             const token = await getToken();
             const {data} = await api.put(`/api/admin/change-credential/${listing.id}`,{newCredential,credentialId: credential.id},{headers : {Authorization : `Bearer ${token}`}});
             toast.success(data.message);
-            toast.dismissAll();
         } catch (error) {
             toast.error(error.message);
             console.log(error);
