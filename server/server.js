@@ -15,13 +15,7 @@ const app = express();
 app.use('/api/stripe', express.raw({type : 'application/json'}), stripeWebhook);
 
 app.use(express.json());
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://your-frontend.vercel.app"
-  ],
-  credentials: true
-}));
+app.use(cors());
 app.use(clerkMiddleware());
 
 const PORT = process.env.PORT || 7000;
