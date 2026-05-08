@@ -307,7 +307,7 @@ export const getAllUserOrder = async (req ,res) => {
     try {
         const {userId} = await req.auth();
         let orders = await prisma.transaction.findMany({
-            where : {userId , isPaid : 'true'},
+            where : {userId , isPaid : true},
             include : {listing : true}
         });
 
@@ -317,7 +317,11 @@ export const getAllUserOrder = async (req ,res) => {
 
         //attach the credential to each order
         const credentials = await prisma.credential.findMany({
-            listingId : {in : orders.map((order)=> order.listingId)}
+            where: {
+                listingId: {
+                    in: orders.map((order) => order.listingId)
+                }
+            }
         });
 
         const ordersWithCredentials = orders.map((order)=> {
@@ -397,7 +401,7 @@ export const purchaseAmount = async (req ,res) => {
         const stripeInstance = new Stripe(process.env.STEIPE_SECRET_KEY);
 
         const session = await stripeInstance.checkout.sessions.create({
-            success_url: `${origin}/loading/my-orders`,
+            success_url: `${origin}/loading/my-order`,
             cancel_url : `${origin}/marketplace`,
             line_items: [
                 {

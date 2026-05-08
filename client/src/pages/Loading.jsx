@@ -10,12 +10,12 @@ const Loading = () => {
   useEffect(()=> {
     if(nextUrl){
       setTimeout(()=> {
-        navigate("/", + nextUrl)
+        navigate("/" + nextUrl)
       },6000);
     }
   },[])
   return (
-    <div className='flex items-center justify-between h-[8-vh]'>
+    <div className='flex items-center justify-center h-[80vh]'>
       <Loader2Icon className='size-7 text-indigo-700 animate-spin'/>
     </div>
   )
