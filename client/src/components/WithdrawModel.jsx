@@ -28,14 +28,15 @@ const WithdrawModel = ({onClose}) => {
       }
       //check all fields are filled
       for(const field of account){
-        if(!cred.value){
+        if(!field.value){
           return toast.error(`Please fill in the ${cred.name} field`);
         }
       }
 
       const confirm = window.confirm('Are you sure you want to submit?');
       if(!confirm) return;
-
+      
+      const token = await getToken();
       const {data} = await api.post('/api/listing/withdraw', {account, amount : parseInt(amount)}, {headers : {Authorization : `Bearer ${token}`}});
 
       toast.success(data.message);
